@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Confirmar Eliminación</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="delete-confirm">
+    <h2>¿Eliminar "<%= game.title %>"?</h2>
+    <p>Esta acción no se puede deshacer</p>
+    
+    <form action="/admin/games/delete/<%= game._id %>" method="POST">
+      <button type="submit" class="btn-danger">Confirmar</button>
+      <a href="/" class="btn-cancel">Cancelar</a>
+    </form>
+  </div>
+</body>
+</html>

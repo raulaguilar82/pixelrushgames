@@ -19,13 +19,7 @@
 
 <body>
   <header>
-    <a href="index.html"><img class="header-logo" href="index.html" src="assets/logo-header.png" alt="logo"></img></a>
-    <nav>
-      <a href="#">Inicio</a>
-      <a href="#apk">Juegos APK</a>
-      <a href="#pc">Juegos PC</a>
-      <a href="#linkcaido">Reportar link caido</a>
-    </nav>
+    <%- include('partials/navbar') %>
   </header>
 
   <main>
@@ -47,18 +41,26 @@
       </section>
     </div>
 
-    <%- include('partials/navbar') %>
+    <div class="games-grid">
+      <% games.forEach(game=> { %>
+        <div class="game-card">
+          <img src="<%= game.imageUrl %>" alt="<%= game.title %>">
+          <h3>
+            <%= game.title %>
+          </h3>
+          <p>
+            <%= game.description %>
+          </p>
+          <a href="/game/<%= game._id %>">Ver más</a>
+        </div>
 
-  <div class="games-grid">
-    <% games.forEach(game => { %>
-      <div class="game-card">
-        <img src="<%= game.imageUrl %>" alt="<%= game.title %>">
-        <h3><%= game.title %></h3>
-        <p><%= game.description %></p>
-        <a href="/game/<%= game._id %>">Ver más</a>
-      </div>
-    <% }) %>
-  </div>
+        <% if (true) { %> <!-- Cambiar a isAuthenticated en producción -->
+          <a href="/admin/confirm-delete/<%= game._id %>" class="delete-link">Eliminar</a>
+        <% } %>
+        
+
+        <% }) %>
+    </div>
 
   </main>
 

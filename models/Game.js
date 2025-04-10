@@ -9,4 +9,14 @@ const gameSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+gameSchema.methods.deleteGame = async function() {
+  try {
+    await this.deleteOne();
+    return true;
+  } catch (error) {
+    console.error('Error al eliminar el juego:', error);
+    return false;
+  }
+};
+
 module.exports = mongoose.model('Game', gameSchema);
