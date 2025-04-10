@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PixelRushGames - Descarga juegos APK y para PC totalmente gratis.">
+  <title>PixelRushGames - Juegos gratis para PC y Android en Español</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon/favicon-32x32.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+</head>
+
+<body>
+  <header>
+    <a href="index.html"><img class="header-logo" href="index.html" src="assets/logo-header.png" alt="logo"></img></a>
+    <nav>
+      <a href="#">Inicio</a>
+      <a href="#apk">Juegos APK</a>
+      <a href="#pc">Juegos PC</a>
+      <a href="#linkcaido">Reportar link caido</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="title-container">
+      <div class="page-title">
+        <h2>Subidos recientemente</h2>
+      </div>
+
+      <section class="search-section">
+        <form class="search-form" action="#" method="get">
+          <input type="text" placeholder="Buscar juegos..." name="search">
+          <button type="submit" aria-label="Buscar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white">
+              <path
+                d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+            </svg>
+          </button>
+        </form>
+      </section>
+    </div>
+
+    <%- include('partials/navbar') %>
+
+  <div class="games-grid">
+    <% games.forEach(game => { %>
+      <div class="game-card">
+        <img src="<%= game.imageUrl %>" alt="<%= game.title %>">
+        <h3><%= game.title %></h3>
+        <p><%= game.description %></p>
+        <a href="/game/<%= game._id %>">Ver más</a>
+      </div>
+    <% }) %>
+  </div>
+
+  </main>
+
+  <footer class="footer">
+    &copy; 2025 PixelRushGames - Todos los derechos reservados.
+  </footer>
+</body>
+
+</html>

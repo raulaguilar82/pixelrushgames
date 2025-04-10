@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= game.title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="game-detail">
+    <img src="<%= game.imageUrl %>" alt="<%= game.title %>">
+    <h1><%= game.title %></h1>
+    <p><%= game.description %></p>
+    <p>Plataforma: <%= game.platform %></p>
+    <a href="<%= game.downloadLink %>" class="download-button">Descargar</a>
+  </div>
+</body>
+</html>
