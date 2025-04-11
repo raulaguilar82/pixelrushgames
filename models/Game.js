@@ -4,8 +4,13 @@ const gameSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   platform: { type: String, required: true },
+  genre: { type: String, required: true },
+  langText: { type: String, required: true },
+  langVoices: { type: String, required: true },
+  fileSize: { type: String, required: true },
   downloadLink: { type: String, required: true },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String, required: true }, // Portada del juego
+  captures: [{ type: String }], // Rutas de las imágenes adicionales
   createdAt: { type: Date, default: Date.now }
 });
 
