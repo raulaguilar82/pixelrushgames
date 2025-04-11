@@ -9,6 +9,12 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+// Verifica si las variables de entorno requeridas están definidas
+const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD'];
+requiredEnvVars.forEach(env => {
+  if (!process.env[env]) throw new Error(`Falta la variable ${env} en .env`);
+});
+
 // Middlewares
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); // Para parsear form-data
@@ -72,6 +78,14 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
+// Limita el número de intentos de autenticación
+const rateLimit = require('express-rate-limit');
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 3, // 5 intentos por IP
+});
+app.use('/admin/*', authLimiter);
+
 // Modelo de datos
 const Game = require('./models/Game');
 
@@ -131,6 +145,15 @@ app.post('/admin/upload', isAuthenticated, upload.fields([
     res.status(500).render('admin/upload', { error: 'Hubo un problema al subir el juego. Inténtalo de nuevo.' });
   }
 });
+
+// Evita ejecución de scripts PHP y JS en la carpeta de uploads
+app.use('/uploads', express.static('public/uploads', {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js') || path.endsWith('.php')) {
+      res.set('Content-Type', 'text/plain');
+    }
+  }
+}));
 
 // Muestra el mensaje de confirmacion de eliminación
 app.get('/admin/confirm-delete/:id', isAuthenticated, async (req, res) => {
