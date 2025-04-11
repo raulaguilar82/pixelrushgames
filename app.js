@@ -82,9 +82,9 @@ const isAuthenticated = (req, res, next) => {
 const rateLimit = require('express-rate-limit');
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
-  max: 3, // 5 intentos por IP
+  max: 3, // 3 intentos por IP
 });
-app.use('/admin/*', authLimiter);
+app.use('/admin/', authLimiter);
 
 // Modelo de datos
 const Game = require('./models/Game');

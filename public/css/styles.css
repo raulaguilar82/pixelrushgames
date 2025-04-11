@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  font-family: "Jersey 10", sans-serif;
+  font-family: "Jersey 15", sans-serif;
   font-weight: 400;
   font-style: normal;
   background-color: var(--light-color);
@@ -87,21 +87,29 @@ nav a:hover {
   width: 100%;
   max-width: 450px;
   height: 42px;
-  border: 2px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
   border-radius: 4px;
-  box-shadow: 2.5px 2.5px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: -1px 0px 0 var(--primary-color);
   overflow: hidden; /* Asegura que los bordes redondeados se apliquen correctamente */
   display: flex;
   align-items: center;
+  background-color: var(--primary-color);
 }
 
 .search-form input {
   flex: 1;
-  width: 1200px;
   padding: 0.7rem 1rem;
   border: none;
   outline: none;
   font-size: 1rem;
+  background-color: #dacdcd;
+  width: 200px;
+  transition: width 0.2s ; /* Transición suave */
+}
+
+.search-form input:focus{
+  width: 250px;
+  background-color: white;
 }
 
 .search-form button {
@@ -142,8 +150,6 @@ nav a:hover {
   font-size: 2rem;
 }
 
-
-
 main {
   flex: 1; /* Hace que el contenido principal ocupe el espacio disponible */
 }
@@ -181,7 +187,8 @@ nav {
   text-align: center;
 }
 
-.delete-btn, .cancel-btn {
+.delete-btn,
+.cancel-btn {
   padding: 0.5rem 1rem;
   margin: 0 0.5rem;
   border: none;
@@ -223,18 +230,6 @@ nav {
   text-decoration: underline;
 }
 
-.delete-link {
-  background: none;
-  border: none;
-  color: #f92f35;
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-  text-decoration: underline;
-}
-
-
-
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -256,23 +251,23 @@ nav {
 }
 
 .game-card:hover {
-  transform: scale(0.99);
-  border-radius: 4px;
+  transform: scale(1.005);
+  padding: 0 0 0.1rem 0;
   box-shadow: #444444 0 0 10px;
 }
 
 .game-card h3 {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 100;
   color: white;
-  margin: 0.55rem 0;
+  margin: 0.3rem 0;
 }
 
 .game-card p {
-  font-size: 1rem;
-  font-weight: 0;
+  font-size: 0.7rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
-  margin: 0.3rem 0;
+  margin: 0.35rem 0 0.6rem;
 }
 
 .game-card img {
