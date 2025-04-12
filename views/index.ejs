@@ -14,7 +14,6 @@
   <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon/favicon-32x32.png">
   <link rel="manifest" href="assets/favicon/site.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-
 </head>
 
 <body>
@@ -43,22 +42,9 @@
 
     <div class="games-grid">
       <% games.forEach(game=> { %>
-        <a href="/game/<%= game._id %>">
-          <div class="game-card">
-
-            <img src="<%= game.imageUrl %>" alt="<%= game.title %>">
-
-            <h3>
-              <%= game.title %>
-            </h3>
-
-            <p>
-              <%= game.genre %>
-            </p>
-
-          </div>
-        </a>
-
+        
+        <%- include('partials/gameCard', { game: game }) %>
+        
         <% if (isAuthenticated) { %> <!-- Cambiar a isAuthenticated en producción -->
           <a href="/admin/confirm-delete/<%= game._id %>" class="delete-link">Eliminar</a>
         <% } %>

@@ -42,24 +42,25 @@ header {
   transform: rotate(1deg) scale(1.02); /* Gira y aumenta ligeramente el tamaño */
 }
 
-nav {
+header nav {
   display: flex;
   background-color: rgba(41, 0, 0, 0.5); /* Fondo sutil */
   backdrop-filter: blur(1px); /* Efecto moderno */
-  padding: 0.2rem 0;
+  padding: 0.25rem 0;
   width: 100%;
 }
 
-nav a {
+header nav a {
   color: rgb(255, 255, 255);
   font-size: 1.25rem;
   text-decoration: none;
   margin: 0 2rem;
   transition: transform 0.2s ease, color 0.2s ease; /* Transición suave */
   text-shadow: #000000 1.5px 1.5px 0px;
+  line-height: 1;
 }
 
-nav a:hover {
+header nav a:hover {
   transform: translateY(-0.5px); /* Levanta el elemento ligeramente */
   text-shadow: #000000 3px 3px 0px; /* Añade sombra al texto */
 }
@@ -274,4 +275,50 @@ nav {
   max-width: 100%;
   height: auto;
   object-fit: cover;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px 80px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #ebebeb;
+  text-align: center;
+  font-size: 1.2rem;
+  color: black;
+}
+
+.login-container h1 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: var(--accent-color);
 }

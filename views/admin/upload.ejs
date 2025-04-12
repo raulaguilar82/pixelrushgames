@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subir Juego | Panel de Admin</title>
+  
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -107,19 +108,19 @@
 
       <!-- Idiomas (texto) -->
       <div class="form-group">
-        <label for="lang-text">Idiomas (Texto)*</label>
+        <label for="langText">Idiomas (Texto)*</label>
         <input type="text" id="langText" name="langText" required>
       </div>
 
       <!-- Idiomas (voces) -->
       <div class="form-group">
-        <label for="lang-voices">Idiomas (Voces)*</label>
+        <label for="langVoices">Idiomas (Voces)*</label>
         <input type="text" id="langVoices" name="langVoices" required>
       </div>
 
       <!-- Tamaño del archivo -->
       <div class="form-group">
-        <label for="file-size">Tamaño del archivo*</label>
+        <label for="fileSize">Tamaño del archivo*</label>
         <input type="text" id="fileSize" name="fileSize" required>
       </div>
 
@@ -136,7 +137,7 @@
       <!-- Enlace de Descarga -->
       <div class="form-group">
         <label for="downloadLink">Enlace de Descarga* (URL)</label>
-        <input type="text" id="downloadLink" name="downloadLink" required placeholder="https://filepaste.com/...">
+        <input type="url" id="downloadLink" name="downloadLink" required placeholder="https://filepaste.com/...">
       </div>
 
       <!-- Portada del Juego -->
@@ -161,6 +162,24 @@
       <div class="form-group">
         <label for="requirements">Requisitos*</label>
         <textarea id="requirements" name="requirements" required></textarea>
+      </div>
+
+      <!-- releaseDate -->
+      <div class="form-group">
+        <label for="releaseDate">Fecha de Lanzamiento*</label>
+        <input type="text" id="releaseDate" name="releaseDate" required>
+      </div>
+
+      <!-- lastUpdate -->
+      <div class="form-group">
+        <label for="lastUpdate">Ultima Actualizacion*</label>
+        <input type="text" id="lastUpdate" name="lastUpdate" required>
+      </div>
+
+      <!-- details -->
+      <div class="details">
+        <label for="file-size">Detalles*</label>
+        <input type="text" id="details" name="details" required>
       </div>
 
       <!-- Botón de Envío -->

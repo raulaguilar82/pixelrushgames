@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración</title>
+
+  <%- include('../partials/head') %>
+
+  <link rel="stylesheet" href="/css/panel.css">
+
+</head>
+<body>
+  <header>
+    <h1>Panel de Administración</h1>
+    <a href="/admin/upload" class="btn">Subir Nuevo Juego</a>
+    <a href="/admin/logout" class="btn btn-danger">Cerrar Sesión</a>
+  </header>
+
+  <main>
+    <h2>Juegos Subidos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Plataforma</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% games.forEach(game => { %>
+          <tr>
+            <td><%= game.title %></td>
+            <td><%= game.platform %></td>
+            <td>
+              <a href="/games/<%= game._id %>" class="btn">Ver</a>
+              <a href="/admin/edit/<%= game._id %>" class="btn btn-warning">Editar</a>
+              <a href="/admin/confirm-delete/<%= game._id %>" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

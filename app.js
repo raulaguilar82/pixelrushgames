@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const session = require('express-session');
 require('dotenv').config();
 
 // Verifica si las variables de entorno requeridas están definidas
@@ -18,6 +19,16 @@ requiredEnvVars.forEach(env => {
 // Middlewares
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); // Para parsear form-data
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || '12345678', // Cambia esto por una clave segura
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60, // 1 hora
+    httpOnly: true, // Protege contra ataques XSS
+  },
+}));
 
 // Configuración de vistas
 app.set('view engine', 'ejs');
@@ -60,22 +71,10 @@ const upload = multer({
 
 // Middleware de autenticación
 const isAuthenticated = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Basic ')) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
-    return res.status(401).send('Acceso denegado');
+  if (req.session && req.session.isAuthenticated) {
+    return next();
   }
-
-  const credentials = Buffer.from(authHeader.split(' ')[1], 'base64').toString();
-  const [username, password] = credentials.split(':');
-
-  if (username === process.env.ADMIN_USERNAME && bcrypt.compareSync(password, process.env.ADMIN_PASSWORD)) {
-    next();
-  } else {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
-    return res.status(401).send('Credenciales inválidas');
-  }
+  res.redirect('/admin/login'); // Redirige al login si no está autenticado
 };
 
 // Limita el número de intentos de autenticación
@@ -84,7 +83,7 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 3, // 3 intentos por IP
 });
-app.use('/admin/', authLimiter);
+app.use('/admin/login', authLimiter);
 
 // Modelo de datos
 const Game = require('./models/Game');
@@ -98,6 +97,44 @@ app.get('/', async (req, res) => {
     console.error('Error al obtener juegos:', error);
     res.status(500).send('Error interno del servidor');
   }
+});
+
+app.get('/admin/panel', isAuthenticated, async (req, res) => {
+  try {
+    const games = await Game.find().sort({ createdAt: -1 }); // Obtén todos los juegos
+    res.render('admin/panel', { games });
+  } catch (error) {
+    console.error('Error al cargar el panel de administración:', error.message);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+
+const gamesRoutes = require('./routes/games.routes');
+app.use('/games', gamesRoutes);
+
+app.get('/admin/login', (req, res) => {
+  res.render('admin/login'); // Renderiza la página de inicio de sesión
+});
+
+app.post('/admin/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (username === process.env.ADMIN_USERNAME && bcrypt.compareSync(password, process.env.ADMIN_PASSWORD)) {
+    req.session.isAuthenticated = true; // Marca al usuario como autenticado
+    res.redirect('/admin/panel'); // Redirige al panel de administración
+  } else {
+    res.status(401).render('admin/login', { error: 'Credenciales inválidas' });
+  }
+});
+
+app.get('/admin/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      return res.redirect('/admin/panel');
+    }
+    res.redirect('/admin/login'); // Redirige al login después de cerrar sesión
+  });
 });
 
 // Muestra el formulario de subida de juegos
@@ -115,7 +152,7 @@ app.post('/admin/upload', isAuthenticated, upload.fields([
       throw new Error('No se subieron todas las imágenes requeridas');
     }
 
-    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, requirements } = req.body;
+    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, requirements, releaseDate, lastUpdate, details } = req.body;
 
     const buildFilePath = (folder, filename) => `/uploads/${folder}/${filename}`;
 
@@ -133,6 +170,9 @@ app.post('/admin/upload', isAuthenticated, upload.fields([
       fileSize,
       downloadLink,
       requirements,
+      releaseDate,
+      lastUpdate,
+      details,
       imageUrl,
       captures, // Guardar las rutas de las imágenes adicionales
     });
@@ -154,6 +194,43 @@ app.use('/uploads', express.static('public/uploads', {
     }
   }
 }));
+
+app.get('/admin/edit/:id', isAuthenticated, async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id);
+    if (!game) {
+      return res.status(404).send('Juego no encontrado');
+    }
+    res.render('admin/edit', { game });
+  } catch (error) {
+    console.error('Error al cargar el formulario de edición:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+
+app.post('/admin/edit/:id', isAuthenticated, async (req, res) => {
+  try {
+    const { title, description, platform, genre, fileSize, downloadLink } = req.body;
+
+    const game = await Game.findByIdAndUpdate(req.params.id, {
+      title,
+      description,
+      platform,
+      genre,
+      fileSize,
+      downloadLink,
+    }, { new: true });
+
+    if (!game) {
+      return res.status(404).send('Juego no encontrado');
+    }
+
+    res.redirect('/admin/panel'); // Redirige al panel de administración después de guardar los cambios
+  } catch (error) {
+    console.error('Error al actualizar el juego:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
 
 // Muestra el mensaje de confirmacion de eliminación
 app.get('/admin/confirm-delete/:id', isAuthenticated, async (req, res) => {
