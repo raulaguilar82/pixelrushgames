@@ -18,10 +18,11 @@ requiredEnvVars.forEach(env => {
 
 // Middlewares
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true })); // Para parsear form-data
+app.use(express.json()); // Analiza cuerpos JSON
+app.use(express.urlencoded({ extended: true })); // Analiza cuerpos URL-encoded
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || '12345678', // Cambia esto por una clave segura
+  secret: process.env.SESSION_SECRET, // Cambia esto por una clave segura
   resave: false,
   saveUninitialized: false,
   cookie: {

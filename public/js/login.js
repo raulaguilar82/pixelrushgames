@@ -16,7 +16,8 @@ document.querySelector('#login-form').addEventListener('submit', async (e) => {
     if (response.ok) {
       // Almacena el token en localStorage
       localStorage.setItem('token', data.token);
-      alert('Inicio de sesión exitoso');
+      alert('Se ha iniciado sesión correctamente');
+      console.log('Redirigiendo al panel...');
       window.location.href = '/admin/panel'; // Redirige al panel de administración
     } else {
       alert(data.error || 'Error al iniciar sesión');
