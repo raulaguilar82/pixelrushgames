@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 const adminController = require('../controllers/adminController');
-const { isAuthenticated } = require('../middlewares/authMiddleware');
-const { authLimiter } = require('../middlewares/rateLimiter');
+const { verifyJWT } = require('../middlewares/auth');
 const multer = require('multer');
-const bcrypt = require('bcryptjs');
-const jwtAuth = require('../middlewares/jwtAuth');
-const { verifyToken } = require('../middlewares/jwtAuth');
 
 // Configuración de Multer
 const upload = multer({
@@ -33,36 +31,26 @@ const upload = multer({
   },
 });
 
+// Rutas públicas
+router.get('/login', adminController.showLogin);
+router.post('/login', adminController.login);
+
+// Middleware de autenticación JWT (protege todas las rutas siguientes)
+router.use(verifyJWT);
+
 // Rutas protegidas
-router.get('/panel', verifyToken, adminController.getPanel);
-router.get('/upload', verifyToken, adminController.getUploadForm);
-router.post('/upload', verifyToken, upload.fields([
+router.get('/panel', adminController.getPanel);
+router.get('/upload', adminController.getUploadForm);
+router.post('/upload', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'captures', maxCount: 10 },
 ]), adminController.uploadGame);
-router.post('/games/delete/:id', verifyToken, adminController.deleteGame);
+router.post('/games/delete/:id', adminController.deleteGame);
 
-// Ruta de inicio de sesión
-router.get('/login', (req, res) => res.render('admin/login'));
-router.post('/login', authLimiter, (req, res) => {
-  const { username, password } = req.body;
-
-  if (username === process.env.ADMIN_USERNAME && bcrypt.compareSync(password, process.env.ADMIN_PASSWORD)) {
-    // Genera un token JWT
-    const token = jwtAuth.generateToken({ username });
-    res.json({ message: 'Inicio de sesión exitoso', token }); // Devuelve el token al cliente
-  } else {
-    res.status(401).json({ error: 'Credenciales inválidas' });
-  }
-});
+// Logout (adaptado para JWT)
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error al cerrar sesión:', err);
-      return res.redirect('/admin/panel');
-    }
-    res.redirect('/admin/login');
-  });
+  res.clearCookie('jwt') // Elimina la cookie JWT
+     .redirect('/admin/login');
 });
 
 module.exports = router;

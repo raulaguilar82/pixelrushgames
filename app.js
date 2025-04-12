@@ -10,6 +10,9 @@ const fs = require('fs');
 const session = require('express-session');
 require('dotenv').config();
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 // Verifica si las variables de entorno requeridas están definidas
 const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD'];
 requiredEnvVars.forEach(env => {

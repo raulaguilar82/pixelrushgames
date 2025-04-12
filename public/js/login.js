@@ -23,7 +23,6 @@ document.querySelector('#login-form').addEventListener('submit', async (e) => {
       alert(data.error || 'Error al iniciar sesión');
     }
   } catch (error) {
-    console.error('Error al iniciar sesión:', error);
     alert('Error al conectar con el servidor');
   }
 });
