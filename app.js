@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+const cors = require('cors');
+
 require('dotenv').config();
 
 const PORT = process.env.PORT;
@@ -37,12 +39,14 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('Conectado a MongoDB'))
   .catch((err) => console.error('Error de conexión:', err));
 
+app.use(cors());
+
 // Rutas
 app.use('/', require('./routes/home.routes'));
 app.use('/admin', require('./routes/admin.routes'));
 app.use('/games', require('./routes/games.routes'));
 
-// Evita ejecución de scripts PHP y JS en la carpeta de uploads
+// Evita ejecución de scripts PHP y JS en la carpeta de uploads /////////////////////////
 app.use('/uploads', express.static('public/uploads', { //////////////reposicionar
   setHeaders: (res, path) => {
     const dangerousExtensions = ['.js', '.php', '.html', '.sh'];

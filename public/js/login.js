@@ -18,7 +18,9 @@ document.querySelector('#login-form').addEventListener('submit', async (e) => {
 
     const response = await fetch('/admin/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ username, password }),
     });
 
@@ -32,6 +34,7 @@ document.querySelector('#login-form').addEventListener('submit', async (e) => {
       alert(data.error || 'Error al iniciar sesión');
     }
   } catch (error) {
+    console.error('Error en la solicitud:', error);
     alert('Error al conectar con el servidor');
   } finally {
     // Restablece el estado del botón
