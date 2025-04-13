@@ -4,11 +4,12 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Sección de Autenticación
+
+// --------------- Sección de Autenticación --------------- //
 
 // Método para mostrar el formulario de login (GET)
 exports.showLogin = (req, res) => {
-  res.render('admin/login', { 
+  res.render('admin/login', {
     error: null,
     success: req.query.success // Para mensajes de éxito
   });
@@ -17,17 +18,23 @@ exports.showLogin = (req, res) => {
 // Método para procesar el login (POST)
 exports.login = async (req, res) => {
   const { username, password } = req.body;
-  
+
   try {
-    // 1. Verifica credenciales (usa variables de entorno)
-    if (username !== process.env.ADMIN_USERNAME || 
-        !(await bcrypt.compare(password, process.env.ADMIN_PASSWORD))) {
-      return res.render('admin/login', { 
-        error: 'Credenciales incorrectas' 
+    if (!username || !password) {
+      return res.render('admin/login', {
+        error: 'Por favor, ingresa un nombre de usuario y contraseña'
       });
     }
 
-    // 2. Crea sesión/token (ejemplo con JWT)
+    // 1. Verifica credenciales (usa variables de entorno)
+    if (username !== process.env.ADMIN_USERNAME ||
+      !(await bcrypt.compare(password, process.env.ADMIN_PASSWORD))) {
+      return res.render('admin/login', {
+        error: 'Credenciales incorrectas'
+      });
+    }
+
+    // 2. Crea sesión/token
     const token = jwt.sign(
       { user: username },
       process.env.JWT_SECRET,
@@ -37,21 +44,27 @@ exports.login = async (req, res) => {
     // 3. Envía token como cookie
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'development'
+      secure: process.env.NODE_ENV === 'production', // Solo en producción
+      maxAge: 3600000 // 1 hora
     });
 
     // 4. Redirige al panel
     res.redirect('/admin/panel');
 
   } catch (error) {
-    console.error('Error en login:', error);
-    res.render('admin/login', { 
-      error: 'Error en el servidor' 
+    res.render('admin/login', {
+      error: 'Error en el servidor'
     });
   }
 };
 
-// Sección de Gestión de Juegos
+// Metodo para cerrar sesión (logout)
+exports.logout = (req, res) => {
+  res.clearCookie('jwt').redirect('/admin/login');
+};
+
+
+// --------------- Sección de Gestión de Juegos --------------- //
 
 exports.getPanel = async (req, res) => {
   try {

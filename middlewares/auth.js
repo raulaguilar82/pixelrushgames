@@ -1,17 +1,30 @@
 const jwt = require('jsonwebtoken');
 
-exports.verifyJWT = (req, res, next) => {
+module.exports = (req, res, next) => {
+
+    // Obtiene el token de las cookies
     const token = req.cookies.jwt;
-    
+
+    // Si no hay token, maneja el error según el tipo de solicitud
     if (!token) {
-        return res.status(401).redirect('/admin/login');
+        if (req.accepts('html')) {
+            return res.redirect('/admin/login');
+        }
+        return res.status(401).json({ error: 'Acceso no autorizado. Token no proporcionado.' });
     }
 
+    // Verifica el token JWT
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            return res.clearCookie('jwt').status(403).redirect('/admin/login');
+            console.error('Error al verificar el token:', err.message);
+            res.clearCookie('jwt');
+            if (req.accepts('html')) {
+                return res.redirect('/admin/login');
+            }
+            return res.status(403).json({ error: 'Token inválido o expirado.' });
         }
-        req.user = decoded.user;
+        // Si el token es válido, agrega los datos decodificados al objeto `req`
+        req.user = decoded;
         next();
     });
 };
