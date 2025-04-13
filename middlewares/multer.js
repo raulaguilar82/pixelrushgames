@@ -17,16 +17,26 @@ const storage = multer.diskStorage({
   },
 });
 
+// Lista de extensiones permitidas
+const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+
 // Configuración de multer
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // Límite de tamaño de archivo: 5 MB
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Solo se permiten imágenes'), false);
+    // Verifica el tipo MIME
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Solo se permiten imágenes'), false);
     }
+
+    // Verifica la extensión del archivo
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      return cb(new Error(`Extensión no permitida: ${fileExtension}`), false);
+    }
+
+    cb(null, true);
   },
 });
 

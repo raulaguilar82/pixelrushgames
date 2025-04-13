@@ -11,8 +11,11 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+const helmet = require('helmet');
+app.use(helmet());
+
 // Verifica si las variables de entorno requeridas están definidas
-const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD'];
+const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'JWT_SECRET', 'NODE_ENV', 'PORT'];
 requiredEnvVars.forEach(env => {
   if (!process.env[env]) {
     console.error(`Falta la variable de entorno: ${env}`);
@@ -42,15 +45,9 @@ app.use('/', require('./routes/home.routes'));
 app.use('/admin', require('./routes/admin.routes'));
 app.use('/games', require('./routes/games.routes'));
 
-// Evita ejecución de scripts PHP y JS en la carpeta de uploads /////////////////////////
-app.use('/uploads', express.static('public/uploads', { //////////////reposicionar
-  setHeaders: (res, path) => {
-    const dangerousExtensions = ['.js', '.php', '.html', '.sh'];
-    if (dangerousExtensions.some(ext => path.endsWith(ext))) {
-      res.set('Content-Type', 'text/plain');
-    }
-  }
-}));
+// Evita ejecución de scripts en la carpeta de uploads
+const uploadsMiddleware = require('./middlewares/uploads');
+app.use('/uploads', uploadsMiddleware);
 
 // Middleware para manejar errores
 app.use((err, req, res, next) => {
