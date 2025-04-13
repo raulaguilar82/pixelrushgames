@@ -26,6 +26,6 @@ router.post('/upload', upload.fields([
 router.post('/games/delete/:id', adminController.deleteGame);
 
 // Logout
-router.post('/logout', adminController.logout);
+router.get('/logout', adminController.logout);
 
 module.exports = router;

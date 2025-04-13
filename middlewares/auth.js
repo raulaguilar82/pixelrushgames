@@ -13,8 +13,11 @@ module.exports = (req, res, next) => {
         return res.status(401).json({ error: 'Acceso no autorizado. Token no proporcionado.' });
     }
 
+    // Decodifica el secreto desde el entorno
+    const secret = Buffer.from(process.env.JWT_SECRET, 'base64');
+
     // Verifica el token JWT
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, secret, (err, decoded) => {
         if (err) {
             console.error('Error al verificar el token:', err.message);
             res.clearCookie('jwt');

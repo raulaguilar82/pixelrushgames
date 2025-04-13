@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-const cors = require('cors');
-
 require('dotenv').config();
 
 const PORT = process.env.PORT;
@@ -38,8 +36,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
   .then(() => console.log('Conectado a MongoDB'))
   .catch((err) => console.error('Error de conexión:', err));
-
-app.use(cors());
 
 // Rutas
 app.use('/', require('./routes/home.routes'));

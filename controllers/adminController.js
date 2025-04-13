@@ -33,12 +33,10 @@ exports.login = async (req, res) => {
       });
     }
 
+    const secret = Buffer.from(process.env.JWT_SECRET, 'base64');
+
     // 2. Crea sesión/token
-    const token = jwt.sign(
-      { user: username },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
+    const token = jwt.sign({ user: username }, secret, { expiresIn: '1h' });
 
     // 3. Envía token como cookie
     res.cookie('jwt', token, {
