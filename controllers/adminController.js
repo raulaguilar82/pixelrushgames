@@ -115,6 +115,72 @@ exports.uploadGame = async (req, res) => {
   }
 };
 
+exports.getEditForm = async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id);
+    if (!game) {
+      return res.redirect('/?error=Juego no encontrado');
+    }
+
+    res.render('admin/edit', {
+      game,
+      error: null,
+      success: req.query.success, // Para mensajes de éxito
+    });
+  } catch (error) {
+    console.error('Error al cargar el formulario de edición:', error.message);
+    res.redirect('/?error=Error al cargar el formulario de edición');
+  }
+};
+
+exports.editGame = async (req, res) => {
+  try {
+    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, requirements, releaseDate, lastUpdate, details } = req.body;
+
+    const game = await Game.findById(req.params.id);
+    if (!game) {
+      return res.redirect('/?error=Juego no encontrado');
+    }
+    
+    game.title = title;
+    game.description = description;
+    game.platform = platform;
+    game.genre = genre;
+    game.langText = langText;
+    game.langVoices = langVoices;
+    game.fileSize = fileSize;
+    game.downloadLink = downloadLink;
+    game.requirements = requirements;
+    game.releaseDate = releaseDate;
+    game.lastUpdate = lastUpdate;
+    game.details = details;
+
+    await game.save();
+    res.redirect('/?success=Juego editado correctamente');
+  } catch (error) {
+    console.error('Error al editar el juego:', error.message);
+    res.redirect(`/admin/edit/${req.params.id}?error=Error al editar el juego`);
+  }
+};
+
+exports.getConfirmDelete = async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id);
+    if (!game) {
+      return res.redirect('/?error=Juego no encontrado');
+    }
+
+    res.render('admin/confirm-delete', {
+      game,
+      error: null,
+      success: req.query.success, // Para mensajes de éxito
+    });
+  } catch (error) {
+    console.error('Error al cargar la confirmación de eliminación:', error.message);
+    res.redirect('/?error=Error al cargar la confirmación de eliminación');
+  }
+};
+
 exports.deleteGame = async (req, res) => {
   try {
     const game = await Game.findById(req.params.id);

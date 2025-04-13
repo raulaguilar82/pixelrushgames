@@ -15,14 +15,22 @@ router.use(verifyJWT);
 // Panel de administración
 router.get('/panel', adminController.getPanel);
 
-// Subir Juego
+// Mostrar formulario de subida de juego
 router.get('/upload', adminController.getUploadForm);
+// Procesar subida de juego
 router.post('/upload', upload.fields([
   { name: 'image', maxCount: 1 },
-  { name: 'captures', maxCount: 10 },
+  { name: 'captures', maxCount: 5 },
 ]), adminController.uploadGame);
 
-// Eliminar Juego
+// Mostrar formulario de edición
+router.get('/edit/:id', adminController.getEditForm);
+// Procesar edición del juego
+router.post('/edit/:id', adminController.editGame);
+
+// Mostrar formulario de confirmación de eliminación
+router.get('/confirm-delete/:id', adminController.getConfirmDelete);
+// Procesar eliminación del juego
 router.post('/games/delete/:id', adminController.deleteGame);
 
 // Logout
