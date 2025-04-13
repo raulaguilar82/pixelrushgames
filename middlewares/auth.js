@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
 
     // Obtiene el token de las cookies
     const token = req.cookies.jwt;
-
+    
     // Si no hay token, maneja el error según el tipo de solicitud
     if (!token) {
         if (req.accepts('html')) {

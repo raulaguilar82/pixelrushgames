@@ -27,8 +27,7 @@ exports.login = async (req, res) => {
     }
 
     // 1. Verifica credenciales (usa variables de entorno)
-    if (username !== process.env.ADMIN_USERNAME ||
-      !(await bcrypt.compare(password, process.env.ADMIN_PASSWORD))) {
+    if (username !== process.env.ADMIN_USERNAME || !(await bcrypt.compare(password, process.env.ADMIN_PASSWORD))) {
       return res.render('admin/login', {
         error: 'Credenciales incorrectas'
       });
