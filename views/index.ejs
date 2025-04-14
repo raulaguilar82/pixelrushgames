@@ -23,13 +23,14 @@
 
   <main>
     <div class="title-container">
+      
       <div class="page-title">
         <h2>Subidos recientemente</h2>
       </div>
 
       <section class="search-section">
         <form class="search-form" action="#" method="get">
-          <input type="text" placeholder="Buscar juegos..." name="search">
+          <input type="text" placeholder="Buscar juegos..." name="search" id="search" value="<%= typeof search !== 'undefined' ? search : '' %>">
           <button type="submit" aria-label="Buscar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white">
               <path
@@ -38,14 +39,23 @@
           </button>
         </form>
       </section>
+
     </div>
 
     <div class="games-grid">
-      <% games.forEach(game=> { %>
-        
-        <%- include('partials/gameCard', { game: game }) %>
+      
+      <% if (games.length > 0) { %>
 
-      <% }) %>
+        <% games.forEach(game=> { %>   
+          <%- include('partials/gameCard', { game: game }) %>
+        <% }) %>
+
+      <% } else { %>
+        <div class="no-results">
+          <p>No se encontraron resultados para "<%= search %>".</p>
+        </div>
+      <% } %>
+
     </div>
 
   </main>
