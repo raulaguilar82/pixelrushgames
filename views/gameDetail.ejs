@@ -2,11 +2,10 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
     <%= title %>
   </title>
+
   <%- include('partials/head') %>
 </head>
 
@@ -15,109 +14,159 @@
     <%- include('partials/navbar') %>
   </header>
 
-  <main class="container my-5">
-    <div class="row">
-      <!-- Columna izquierda - Portada y detalles técnicos -->
-      <div class="col-lg-4 mb-4">
-        <div class="card shadow-sm">
-          <img src="<%= game.imageUrl %>" class="card-img-top" alt="Portada de <%= game.title %>">
-          <div class="card-body">
-            <h2 class="h4 card-title">
-              <%= game.title %>
-            </h2>
-
-            <div class="game-meta mb-3">
-              <div class="d-flex justify-content-between py-2 border-bottom">
-                <span class="text-muted">Plataforma:</span>
-                <span class="fw-bold">
-                  <%= game.platform %>
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between py-2 border-bottom">
-                <span class="text-muted">Géneros:</span>
-                <span class="fw-bold">
-                  <%= game.genre %>
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between py-2 border-bottom">
-                <span class="text-muted">Idiomas (texto):</span>
-                <span>
-                  <%= game.langText %>
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between py-2 border-bottom">
-                <span class="text-muted">Idiomas (voces):</span>
-                <span>
-                  <%= game.langVoices %>
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between py-2 border-bottom">
-                <span class="text-muted">Tamaño:</span>
-                <span>
-                  <%= game.fileSize %>
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between py-2">
-                <span class="text-muted">Fecha de estreno:</span>
-                <span>
-                  <%= game.releaseDate %>
-                </span>
-              </div>
-            </div>
-
-            <a href="<%= game.downloadLink %>" class="btn btn-primary w-100 py-2" target="_blank">
-              <i class="bi bi-download me-2"></i>Descargar
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Columna derecha - Descripción y capturas -->
-      <div class="col-lg-8">
-        <div class="card shadow-sm mb-4">
-          <div class="card-body">
-            <h3 class="h5 card-title">Descripción</h3>
-            <p class="card-text">
-              <%= game.description %>
-            </p>
-          </div>
-        </div>
-
-        <% if (game.captures && game.captures.length> 0) { %>
+  <main class="bd-container">
+    <div class="cont-container">
+      <div class="row">
+        <!-- Columna izquierda - Portada y detalles técnicos -->
+        <div class="col-lg-4 mb-4">
           <div class="card shadow-sm">
+            <img src="<%= game.imageUrl %>" class="card-img-top" alt="Portada de <%= game.title %>">
             <div class="card-body">
-              <h3 class="h5 card-title">Capturas de pantalla</h3>
-              <div class="row g-3">
-                <% game.captures.forEach(capture=> { %>
-                  <div class="col-6 col-md-4">
-                    <a href="<%= capture %>" data-fancybox="gallery">
-                      <img src="<%= capture %>" class="img-thumbnail w-100" alt="Captura de <%= game.title %>">
-                    </a>
-                  </div>
-                  <% }); %>
+
+              <div class="game-meta mb-3">
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Plataforma:</span>
+                  <span class="text-end fw-bold">
+                    <%= game.platform %>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Géneros:</span>
+                  <span class="w-50 text-end">
+                    <%= game.genre %>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Idiomas (texto):</span>
+                  <span class="text-end">
+                    <%= game.langText %>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Idiomas (voces):</span>
+                  <span class="text-end">
+                    <%= game.langVoices %>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Tamaño del archivo:</span>
+                  <span class="text-end fw-bold">
+                    <%= game.fileSize %>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Fecha de estreno:</span>
+                  <span class="text-end">
+                    <%= game.releaseDate %>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span class="text-muted">Última actualización:</span>
+                  <span class="text-end w-50">
+                    <%= game.lastUpdate %>
+                  </span>
+                </div>
+              </div>
+
+
+              <h4 class="h4 card-title text-center">Enlaces de descarga</h4>
+
+              <div class="br-td"></div>
+
+              <a href="<%= game.downloadLink %>" class="btn btn-danger w-100 py-2" target="_blank">
+                <i class="bi bi-download me-2"></i>Descargar MEGA
+              </a>
+              <a href="<%= game.downloadLink %>" class="btn btn-primary w-100 py-2 mt-2" target="_blank">
+                <i class="bi bi-download me-2"></i>Descargar MediaFire
+              </a>
+              <a href="<%= game.downloadLink %>" class="btn btn-success w-100 py-2 mt-2" target="_blank">
+                <i class="bi bi-download me-2"></i>Descargar Google Drive
+              </a>
+              <a href="">¿Como descargar?</a>
+
+              <div class="card shadow-sm mt-4">
+                <div class="card-body">
+    
+                  <h3 class="h3 card-title dt-description">Detalles</h3>
+                  <div class="br-tdt"></div>
+                  <p class="card-text dt-game-description dt-brln">
+                    <%= game.details %>
+                  </p>
+                    
+                </div>
               </div>
             </div>
           </div>
-          <% } %>
+        </div>
+
+        <!-- Columna derecha - Descripción y capturas -->
+        <div class="col-lg-8">
+
+
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+              <h1 class="dt-game-title">
+                <%= game.title %>
+              </h1>
+
+              <div class="br-td"></div>
+
+              <h3 class="h3 card-title dt-description">Descripción</h3>
+              <p class="card-text dt-game-description">
+                <%= game.description %>
+              </p>
+            </div>
+          </div>
+
+          <% if (game.captures && game.captures.length> 0) { %>
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h3 class="cblack h2 card-title text-center mb-4 mt-2">Capturas de pantalla</h3>
+                <div class="row g-3">
+                  <% game.captures.forEach(capture=> { %>
+                    <div class="col-md-13">
+                        <img src="<%= capture %>" class="w-100" alt="Captura de <%= game.title %>">
+                    </div>
+                    <% }); %>
+                </div>
+              </div>
+            </div>
+            <% } %>
+
+            <div class="card shadow-sm mb-4 mt-4">
+              <div class="card-body">
+  
+                <h3 class="h3 card-title dt-description">Requisitos</h3>
+                <div class="br-td"></div>
+                <h4 class="h4 card-title text-center mb-3">Requisitos Minimos</h3>
+                <div class="br-tdt"></div>
+                <p class="card-text dt-game-description dt-brln">
+                  <%= game.minRequirements %>
+                </p>
+
+                <div class="br-td"></div>
+                <h4 class="h4 card-title text-center mb-3">Requisitos Recomendados</h3>
+                <div class="br-tdt"></div>
+                <p class="card-text dt-game-description dt-brln">
+                  <%= game.recRequirements %>
+                </p>
+                  
+              </div>
+            </div>
+        </div>
       </div>
     </div>
   </main>
 
   <%- include('partials/footer') %>
-
-    <!-- Fancybox para la galería -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-    <script>
-      Fancybox.bind("[data-fancybox]", {
-        // Opciones de Fancybox
-      });
-    </script>
 </body>
 
 </html>

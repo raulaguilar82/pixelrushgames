@@ -44,8 +44,12 @@
         <input type="url" id="downloadLink" name="downloadLink" value="<%= game.downloadLink %>" required>
       </div>
       <div class="form-group">
-        <label for="requirements">Requisitos</label>
-        <textarea id="requirements" name="requirements" required><%= game.requirements %></textarea>
+        <label for="minRequirements">Requisitos Minimos</label>
+        <textarea id="minRequirements" name="minRequirements" required><%= game.minRequirements %></textarea>
+      </div>
+      <div class="form-group">
+        <label for="recRequirements">Requisitos Recomendados</label>
+        <textarea id="recRequirements" name="recRequirements" required><%= game.recRequirements %></textarea>
       </div>
       <div class="form-group">
         <label for="releaseDate">Fecha de Lanzamiento</label>

@@ -8,7 +8,8 @@ const gameSchema = new mongoose.Schema({
   langText: { type: String, required: true },
   langVoices: { type: String, required: true },
   fileSize: { type: String, required: true },
-  requirements: { type: String, required: true },
+  minRequirements: { type: String, required: true },
+  recRequirements: { type: String, required: true },
   downloadLink: { type: String, required: true },
   imageUrl: { type: String, required: true }, // Portada del juego
   captures: [{ type: String }], // Rutas de las imágenes adicionales

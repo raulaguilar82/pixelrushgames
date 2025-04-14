@@ -83,7 +83,7 @@ exports.uploadGame = async (req, res) => {
       throw new Error('No se subieron todas las imágenes requeridas');
     }
 
-    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, requirements, releaseDate, lastUpdate, details } = req.body;
+    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, minRequirements, recRequirements, releaseDate, lastUpdate, details } = req.body;
 
     const buildFilePath = (folder, filename) => `/uploads/${folder}/${filename}`;
     const folderName = title.replace(/\s+/g, '_');
@@ -99,7 +99,8 @@ exports.uploadGame = async (req, res) => {
       langVoices,
       fileSize,
       downloadLink,
-      requirements,
+      minRequirements,
+      recRequirements,
       releaseDate,
       lastUpdate,
       details,
@@ -135,7 +136,7 @@ exports.getEditForm = async (req, res) => {
 
 exports.editGame = async (req, res) => {
   try {
-    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, requirements, releaseDate, lastUpdate, details } = req.body;
+    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, minRequirements, recRequirements, releaseDate, lastUpdate, details } = req.body;
 
     const game = await Game.findById(req.params.id);
     if (!game) {
@@ -150,7 +151,8 @@ exports.editGame = async (req, res) => {
     game.langVoices = langVoices;
     game.fileSize = fileSize;
     game.downloadLink = downloadLink;
-    game.requirements = requirements;
+    game.minRequirements = minRequirements;
+    game.recRequirements = recRequirements;
     game.releaseDate = releaseDate;
     game.lastUpdate = lastUpdate;
     game.details = details;
