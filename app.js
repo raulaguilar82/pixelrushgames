@@ -12,7 +12,15 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 const helmet = require('helmet');
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    connectSrc: ["'self'", "https://discord.com"],
+    scriptSrc: ["'self'", "'unsafe-inline'"],
+    styleSrc: ["'self'", "'unsafe-inline'"]
+  }
+})
+);
 
 // Verifica si las variables de entorno requeridas están definidas
 const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'JWT_SECRET', 'NODE_ENV', 'PORT'];

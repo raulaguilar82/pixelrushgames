@@ -22,3 +22,7 @@ exports.getDMCA = (req, res) => {
 exports.getContact = (req, res) => {
   res.render('contact');
 }
+
+exports.getBrokenURL = (req, res) => {
+  res.render('brokenURL');
+}

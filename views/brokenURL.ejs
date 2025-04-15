@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Link caido | PixelRushGames</title>
+    <%- include('partials/head') %>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/navbar') %>
+    </header>
+
+    <main>
+        <h1>🔗 Reportar Enlace Caído</h1>
+        <form id="reportForm">
+            <div class="form-group">
+                <label for="gameName">Nombre del Juego*</label>
+                <input type="text" id="gameName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="brokenLink">Enlace que no funciona*</label>
+                <input type="url" id="brokenLink" required placeholder="https://">
+            </div>
+
+            <div class="form-group">
+                <label for="problemType">Tipo de problema*</label>
+                <select id="problemType" required>
+                    <option value="">Seleccionar...</option>
+                    <option value="link_caido">Enlace roto</option>
+                    <option value="link_equivocado">Enlace incorrecto</option>
+                    <option value="contenido_erroneo">Contenido no coincide</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userNote">Notas adicionales</label>
+                <textarea id="userNote" rows="3" placeholder="Ej: El enlace redirige a publicidad..."></textarea>
+            </div>
+
+            <button type="submit">Enviar Reporte</button>
+        </form>
+
+        <div id="responseMessage" style="margin-top: 20px;"></div>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script src="/js/reports.js"></script>
+</body>
+
+</html>

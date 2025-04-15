@@ -8,4 +8,6 @@ router.get('/dmca', homeController.getDMCA);
 
 router.get('/contact', homeController.getContact);
 
+router.get('/brokenURL', homeController.getBrokenURL);
+
 module.exports = router;
