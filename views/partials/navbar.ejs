@@ -6,23 +6,31 @@
 
     <div class="search-container">
         <section class="search-section">
-            <form class="search-form" action="#" method="get">
-                <input type="text" placeholder="Buscar juegos..." name="search" id="search"
-                    value="<%= typeof search !== 'undefined' ? search : '' %>" autocomplete="off">
-                <button type="submit" aria-label="Buscar">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white">
-                        <path
-                            d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
-                    </svg>
-                </button>
+
+            <form class="search-form" action="/search" method="GET">
+                <input type="text" placeholder="Buscar juegos..." name="q" id="search" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+                    autocomplete="off">
+
+                <% if (currentPlatform) { %>
+                    <input type="hidden" name="platform" value="<%= currentPlatform %>">
+                    <% } %>
+
+                        <button type="submit" aria-label="Buscar">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
+                                fill="white">
+                                <path
+                                    d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+                            </svg>
+                        </button>
             </form>
+
         </section>
     </div>
 
 </div>
 <nav>
-    <a href="/">Inicio</a>
-    <a href="#apk">Juegos APK</a>
-    <a href="#pc">Juegos PC</a>
+    <a href="/" class="<%= !currentPlatform ? 'active' : '' %>">Inicio</a>
+    <a href="/games?platform=APK" class="<%= currentPlatform === 'APK' ? 'active' : '' %>">Juegos APK</a>
+    <a href="/games?platform=PC" class="<%= currentPlatform === 'PC' ? 'active' : '' %>">Juegos PC</a>
     <a href="/brokenURL">Reportar link caido</a>
 </nav>

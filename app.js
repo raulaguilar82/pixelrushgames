@@ -48,6 +48,18 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('Conectado a MongoDB'))
   .catch((err) => console.error('Error de conexión:', err));
 
+app.use((req, res, next) => {
+  res.locals.currentPlatform = req.query.platform || null; // Captura ?platform=PC o APK
+  next();
+});
+
+app.use((req, res, next) => {
+  // Inicializa searchQuery como cadena vacía si no está definida
+  res.locals.searchQuery = '';
+  res.locals.currentPlatform = null;
+  next();
+});
+
 // Rutas
 app.use('/', require('./routes/home.routes'));
 app.use('/admin', require('./routes/admin.routes'));

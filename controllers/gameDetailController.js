@@ -1,18 +1,22 @@
 const Game = require('../models/Game');
+const slugify = require('slugify');
 
-exports.getGameDetails = async (req, res) => {
+exports.getGameBySlug = async (req, res) => {
   try {
-    const game = await Game.findById(req.params.id);
+    const game = await Game.findOne({ slug: req.params.slug });
+    
     if (!game) {
-      return res.status(404).render('error', { 
-        message: 'Juego no encontrado' 
+      return res.status(404).render('notFound', { 
+        message: `El juego "${req.params.slug}" no existe` 
       });
     }
-    
-    res.render('gameDetail', { title: `${game.title} | PixelRushGames`, game });
-    
-  } catch (error) {
-    console.error('Error al obtener detalles del juego:', error);
+
+    res.render('gameDetail', { 
+      game,
+      title: game.title // Para el <title> de la página
+    });
+  } catch (err) {
+    console.error('Error en getGameBySlug:', err);
     res.status(500).render('error', { 
       message: 'Error al cargar el juego' 
     });

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/head') %>
+        <title>Resultados para "<%= searchQuery %>" | PixelRushGames</title>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/navbar') %>
+    </header>
+
+    <main>
+
+        <div class="grid-container">
+
+            <div class="page-title">
+                <h2>Resultados para "<%= searchQuery %>"</h2>
+            </div>
+
+            <div class="games-grid">
+
+                <% if (games.length> 0) { %>
+
+                    <% games.forEach(game=> { %>
+                        <%- include('partials/gameCard', { game }) %>
+                            <% }) %>
+
+                                <% } else { %>
+                                    <p>No se encontraron juegos para "<%= searchQuery %>".</p>
+                                    <% } %>
+            </div>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

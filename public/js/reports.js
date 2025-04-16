@@ -61,7 +61,8 @@ function registerReport() {
 
 // Función para enviar a Discord via Webhook (sin cambios)
 function sendToDiscord(data) {
-    const webhookURL = 'https://discord.com/api/webhooks/1361477985965703370/K3vTLQiWNn-jZZhp-2TESp9Yd6G0MTJq-WS36TvVz8NjxjBjgnS5sTRSWfFDtVKSrMY6';
+    
+    const webhookURL = "https://discord.com/api/webhooks/1361477985965703370/K3vTLQiWNn-jZZhp-2TESp9Yd6G0MTJq-WS36TvVz8NjxjBjgnS5sTRSWfFDtVKSrMY6"; // Asegúrate de que esta variable de entorno esté configurada
 
     const embed = {
         title: `Nuevo reporte: ${data.gameName}`,
