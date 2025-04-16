@@ -5,8 +5,16 @@
   <title>
     <%= title %>
   </title>
-
   <%- include('partials/head') %>
+  <link rel="stylesheet" href="/css/gameDetail.css">
+
+  <script>
+    const minFromDB = `<%= game.minRequirements %>`;
+    const minRequirementsText = minFromDB.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    
+    const recFromDB = `<%= game.recRequirements %>`;
+    const recRequirementsText = recFromDB.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  </script>
 </head>
 
 <body>
@@ -33,7 +41,7 @@
 
                 <div class="d-flex justify-content-between py-2 border-bottom">
                   <span class="text-muted">Géneros:</span>
-                  <span class="w-50 text-end">
+                  <span class="ovflow text-end">
                     <%= game.genre %>
                   </span>
                 </div>
@@ -75,25 +83,25 @@
               </div>
 
 
-              <h4 class="h4 card-title text-center">Enlaces de descarga</h4>
+              <h4 class="h4 card-title text-center"><img src="/assets/downloadlinks.png" alt="" class="subtitleimg"></h4>
 
               <div class="br-td"></div>
 
-              <a href="<%= game.downloadLink %>" class="btn btn-danger w-100 py-2" target="_blank">
-                <i class="bi bi-download me-2"></i>Descargar MEGA
+              <a href="<%= game.downloadLink %>" class="btn btn-danger w-100 py-2 btnheight" target="_blank">
+                <i class="bi bi-download me-2"></i><img src="/assets/mega.png" alt="Descargar Mega" class="dwIMG">
               </a>
-              <a href="<%= game.downloadLink %>" class="btn btn-primary w-100 py-2 mt-2" target="_blank">
-                <i class="bi bi-download me-2"></i>Descargar MediaFire
+              <a href="<%= game.downloadLink %>" class="btn btn-primary w-100 py-2 mt-2 btnheight" target="_blank">
+                <i class="bi bi-download me-2"></i><img src="/assets/mediafire1.png" alt="Descargar MediaFire" class="dwIMG">
               </a>
-              <a href="<%= game.downloadLink %>" class="btn btn-success w-100 py-2 mt-2" target="_blank">
-                <i class="bi bi-download me-2"></i>Descargar Google Drive
+              <a href="<%= game.downloadLink %>" class="btn btn-success w-100 py-2 mt-2 btnheight" target="_blank">
+                <i class="bi bi-download me-2"></i><img src="/assets/gdrive.png" alt="Descargar Mega" class="dwIMG">
               </a>
               <a href="">¿Como descargar?</a>
 
               <div class="card shadow-sm mt-4">
                 <div class="card-body">
     
-                  <h3 class="h3 card-title dt-description">Detalles</h3>
+                  <h3 class="h3 card-title dt-subtitle">Detalles</h3>
                   <div class="br-tdt"></div>
                   <p class="card-text dt-game-description dt-brln">
                     <%= game.details %>
@@ -107,9 +115,6 @@
 
         <!-- Columna derecha - Descripción y capturas -->
         <div class="col-lg-8">
-
-
-
           <div class="card shadow-sm mb-4">
             <div class="card-body">
 
@@ -119,17 +124,42 @@
 
               <div class="br-td"></div>
 
-              <h3 class="h3 card-title dt-description">Descripción</h3>
+              <h3 class="dt-subtitle"><img src="/assets/description.png" alt="Descripción" class="dcIMG"></h3>
               <p class="card-text dt-game-description">
                 <%= game.description %>
               </p>
             </div>
           </div>
 
+          <div class="card shadow-sm mb-4 mt-4">
+            <div class="card-body">
+
+              <h3 class="dt-subtitle"><img src="/assets/requirements.png" alt="Requisitos" class="dcIMG"></h3>
+              <div class="br-td"></div>
+              <h4 class="dt-subsubtitle mb-3">Requisitos Minimos</h4>
+              <div class="dt-requirements-br"></div>
+              <p class="card-text dt-game-description dt-brln">
+                <script>
+                  document.write(minRequirementsText);
+                </script>
+              </p>
+
+              <div class="br-td"></div>
+              <h4 class="dt-subsubtitle mb-3">Requisitos Recomendados</h4>
+              <div class="dt-requirements-br"></div>
+              <p class="dt-game-requirements">
+                <script>
+                  document.write(recRequirementsText);
+                </script>
+              </p>
+                
+            </div>
+          </div>
+
           <% if (game.captures && game.captures.length> 0) { %>
             <div class="card shadow-sm">
               <div class="card-body">
-                <h3 class="cblack h2 card-title text-center mb-4 mt-2">Capturas de pantalla</h3>
+                <h3 class="dt-subtitle mb-4 mt-2"><img src="/assets/images.png" alt="Imagenes" class="dcIMG"></h3>
                 <div class="row g-3">
                   <% game.captures.forEach(capture=> { %>
                     <div class="col-md-13">
@@ -141,26 +171,6 @@
             </div>
             <% } %>
 
-            <div class="card shadow-sm mb-4 mt-4">
-              <div class="card-body">
-  
-                <h3 class="h3 card-title dt-description">Requisitos</h3>
-                <div class="br-td"></div>
-                <h4 class="h4 card-title text-center mb-3">Requisitos Minimos</h3>
-                <div class="br-tdt"></div>
-                <p class="card-text dt-game-description dt-brln">
-                  <%= game.minRequirements %>
-                </p>
-
-                <div class="br-td"></div>
-                <h4 class="h4 card-title text-center mb-3">Requisitos Recomendados</h3>
-                <div class="br-tdt"></div>
-                <p class="card-text dt-game-description dt-brln">
-                  <%= game.recRequirements %>
-                </p>
-                  
-              </div>
-            </div>
         </div>
       </div>
     </div>

@@ -16,8 +16,8 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
     connectSrc: ["'self'", "https://discord.com"],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
-    styleSrc: ["'self'", "'unsafe-inline'"]
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+    styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"]
   }
 })
 );
@@ -55,6 +55,7 @@ app.use('/games', require('./routes/games.routes'));
 
 // Evita ejecución de scripts en la carpeta de uploads
 const uploadsMiddleware = require('./middlewares/uploads');
+const { report } = require('process');
 app.use('/uploads', uploadsMiddleware);
 
 // Middleware para manejar errores

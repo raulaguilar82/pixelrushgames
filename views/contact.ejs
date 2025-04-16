@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Contacto | PixelRushGames</title>
-    
+
     <%- include('partials/head') %>
 </head>
+
 <body>
     <header>
         <%- include('partials/navbar') %>
     </header>
 
-    <main>
-        <h1>Contacto</h1>
+    <main class="form-container">
+        <div class="form-content">
+            <h1 class="text-center mb-3">Contacto</h1>
 
-        <form action="/send-message" method="POST">
-            <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-            </div>
-            <button type="submit">Send Message</button>
-        </form>
+            <div class="br-tdt"></div>
+
+            <h2 class="text-center mt-3 mb-3">¿Buscas contactar con PixelRushGames?</h2>
+
+            <div class="br-tdt"></div>
+
+            <p class="text-center mt-4">
+                Si tienes preguntas, sugerencias o colaboraciones, ¡nos encantaría escucharte!
+                <br>
+                <br>
+                <strong>✉️ Escríbenos directamente a:</strong> <i>contacto@pixelrushgames.com</i>
+                <br>
+                <br>
+                <strong>📢 Nota:</strong>
+
+                Solo atendemos consultas laborales o profesionales (no soporte técnico de juegos).
+                <br>
+                Si reportaste un error en un juego, revisaremos tu mensaje en menos de 48 horas.
+                <br>
+                <br>
+                <strong>¡Gracias por ser parte de nuestra comunidad! 🎮</strong>
+            </p>
+        </div>
     </main>
-    
+
     <footer>
         <%- include('partials/footer') %>
     </footer>
 </body>
+
 </html>

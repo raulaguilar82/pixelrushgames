@@ -1,0 +1,83 @@
+body {
+    font-size: 0.85rem;
+}
+
+.ovflow {
+    max-width: 70%;
+}
+
+.dt-game-title {
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: black;
+    margin: 0 0 1rem;
+    text-align: center;
+}
+
+.dt-subtitle {
+    font-size: 1.5rem;
+    color: black;
+    font-weight: 500;
+    margin: 0 0 0.8rem;
+    text-align: center;
+}
+
+.dt-subsubtitle {
+    font-size: 1.2rem;
+    color: black;
+    font-weight: 500;
+    text-align: center;
+}
+
+.dt-game-description {
+    font-size: 1.1rem;
+    padding: 0 0 1rem;
+    color: black;
+    text-align: center;
+    font-weight: 400;
+}
+
+.dt-requirements {
+    font-size: 1.1rem;
+    padding: 0 0 1rem;
+    color: black;
+    text-align: center;
+    font-weight: 400;
+}
+
+.dt-requirements-br {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: rgb(192, 192, 192);
+}
+
+.dt-game-requirements {
+    font-size: 1.1rem;
+    font-weight: 400;
+    white-space: pre-line;
+    text-align: center;
+    margin-top: 0;
+}
+
+strong {
+    font-weight: 500;
+}
+
+.dwIMG {
+    width: fit-content;
+    height: 100%;
+}
+
+.dcIMG {
+    width: 45%;
+}
+
+.btnheight {
+    height: 45px;
+}
+
+.subtitleimg {
+    width: 100%;
+    object-fit: cover;
+}

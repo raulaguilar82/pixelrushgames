@@ -11,39 +11,31 @@
         <%- include('partials/navbar') %>
     </header>
 
-    <main>
-        <h1>🔗 Reportar Enlace Caído</h1>
-        <form id="reportForm">
-            <div class="form-group">
-                <label for="gameName">Nombre del Juego*</label>
-                <input type="text" id="gameName" required>
-            </div>
+    <main class="form-container">
+        <div class="form-content">
+            <h1>🔗 Reportar Enlace Caído</h1>
+            <form id="reportForm">
+                <div class="form-group">
+                    <label for="gameName" class="fw-bold">Nombre del juego *</label>
+                    <input type="text" id="gameName" required placeholder="Ej: Call of Duty...">
+                </div>
 
-            <div class="form-group">
-                <label for="brokenLink">Enlace que no funciona*</label>
-                <input type="url" id="brokenLink" required placeholder="https://">
-            </div>
+                <div class="form-group">
+                    <label for="brokenLink" class="fw-bold">Cual enlace no funciona? *</label>
+                    <input type="text" id="brokenLink" required placeholder="Mega, Mediafire, Google Drive...">
+                </div>
 
-            <div class="form-group">
-                <label for="problemType">Tipo de problema*</label>
-                <select id="problemType" required>
-                    <option value="">Seleccionar...</option>
-                    <option value="link_caido">Enlace roto</option>
-                    <option value="link_equivocado">Enlace incorrecto</option>
-                    <option value="contenido_erroneo">Contenido no coincide</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label for="userNote" class="fw-bold">Notas adicionales</label>
+                    <textarea id="userNote" rows="6" placeholder="Ej: El enlace redirige a publicidad..."
+                        class="w-100"></textarea>
+                </div>
 
-            <div class="form-group">
-                <label for="userNote">Notas adicionales</label>
-                <textarea id="userNote" rows="3" placeholder="Ej: El enlace redirige a publicidad..."></textarea>
-            </div>
+                <button type="submit" class="btn btn-success">Enviar Reporte</button>
+            </form>
 
-            <button type="submit">Enviar Reporte</button>
-        </form>
-
-        <div id="responseMessage" style="margin-top: 20px;"></div>
-
+            <div id="responseMessage" style="margin-top: 20px;"></div>
+        </div>
     </main>
 
     <%- include('partials/footer') %>
