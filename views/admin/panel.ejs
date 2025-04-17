@@ -33,7 +33,7 @@
             <td><%= game.title %></td>
             <td><%= game.platform %></td>
             <td>
-              <a href="/games/<%= game._id %>" class="btn">Ver</a>
+              <a href="/games/<%= game.slug %>" class="btn">Ver</a>
               <a href="/admin/edit/<%= game._id %>" class="btn btn-warning">Editar</a>
               <a href="/admin/confirm-delete/<%= game._id %>" class="btn btn-danger">Eliminar</a>
             </td>
