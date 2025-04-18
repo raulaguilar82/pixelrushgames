@@ -1,5 +1,4 @@
 <div class="logo-search-container">
-
     <div class="logo-container">
         <a href="/"><img class="header-logo" src="/assets/logo-header.png" alt="Logo PixelRushGames"></img></a>
     </div>
@@ -8,8 +7,9 @@
         <section class="search-section">
 
             <form class="search-form" action="/search" method="GET">
-                <input type="text" placeholder="Buscar juegos..." name="q" id="search" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
-                    autocomplete="off">
+                <input type="text" placeholder="Buscar juegos..." name="q" id="search"
+                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" autocomplete="off"
+                    class="search-input">
 
                 <% if (currentPlatform) { %>
                     <input type="hidden" name="platform" value="<%= currentPlatform %>">
@@ -27,10 +27,44 @@
         </section>
     </div>
 
+    <button class="menu-toggle" id="menu-toggle">☰</button>
 </div>
-<nav>
+
+<nav id="nav-menu" class="nav nav-menu">
     <a href="/" class="<%= !currentPlatform ? 'active' : '' %>">Inicio</a>
-    <a href="/games?platform=APK" class="<%= currentPlatform === 'APK' ? 'active' : '' %>">Juegos APK</a>
+    <a href="/games?platform=Android" class="<%= currentPlatform === 'Android' ? 'active' : '' %>">Juegos Android</a>
     <a href="/games?platform=PC" class="<%= currentPlatform === 'PC' ? 'active' : '' %>">Juegos PC</a>
     <a href="/brokenURL">Reportar link caido</a>
+    <div class="search-container-mobile">
+        <section class="search-section-mobile">
+
+            <form class="search-form-mobile" action="/search" method="GET">
+                <input type="text" placeholder="Buscar juegos..." name="q" id="search"
+                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" autocomplete="off"
+                    class="search-input-mobile">
+
+                <% if (currentPlatform) { %>
+                    <input type="hidden" name="platform" value="<%= currentPlatform %>">
+                    <% } %>
+
+                        <button type="submit" aria-label="Buscar">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
+                                fill="white">
+                                <path
+                                    d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+                            </svg>
+                        </button>
+            </form>
+
+        </section>
+    </div>
 </nav>
+
+<script>
+    const toggleButton = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    toggleButton.addEventListener('click', () => {
+        navMenu.classList.toggle('show');
+    });
+</script>

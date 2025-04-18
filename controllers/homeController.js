@@ -30,7 +30,7 @@ exports.getBrokenURL = (req, res) => {
 exports.gamesController = {
   getAllGames: async (req, res) => {
     try {
-      const platformFilter = req.query.platform; // "PC" o "APK"
+      const platformFilter = req.query.platform; // "PC" o "ANDROID"
       let games = await Game.find();
 
       // Filtrado por plataforma (si existe el query)
