@@ -14,4 +14,6 @@ router.get('/games', homeController.gamesController.getAllGames);
 
 router.get('/search', homeController.searchGames);
 
+router.get('/games', homeController.getPaginatedGames);
+
 module.exports = router;

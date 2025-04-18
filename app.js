@@ -52,6 +52,8 @@ app.use((req, res, next) => {
   // Inicializa searchQuery como cadena vacía si no está definida
   res.locals.searchQuery = '';
   res.locals.currentPlatform = req.query.platform || null;
+  res.locals.currentPage = 1;
+  res.locals.totalPages = 1;
   next();
 });
 

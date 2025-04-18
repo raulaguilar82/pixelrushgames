@@ -2,13 +2,33 @@ const Game = require('../models/Game');
 
 exports.getHome = async (req, res) => {
   try {
-    const search = req.query.search || ''; // Obtén el término de búsqueda de la query string
-    const query = search
-      ? { title: { $regex: search, $options: 'i' } } // Filtra por título (insensible a mayúsculas/minúsculas)
+    const search = req.query.search || '';
+    const page = parseInt(req.query.page) || 1; // Página actual (default: 1)
+    const limit = 10; // Límite de juegos por página
+    const skip = (page - 1) * limit;
+
+    // Construye el query de búsqueda
+    const query = search 
+      ? { title: { $regex: search, $options: 'i' } } 
       : {};
 
-    const games = await Game.find(query).sort({ createdAt: -1 }).limit(10);
-    res.render('index', { games, search, searchQuery: req.query.q || '', currentPlatform: null });
+    // Obtén el total de juegos (para calcular páginas)
+    const totalGames = await Game.countDocuments(query);
+    const totalPages = Math.ceil(totalGames / limit);
+
+    // Obtén los juegos paginados
+    const games = await Game.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.render('index', { 
+      games,
+      currentPage: page, // ✅ Ahora está definido
+      totalPages,       // ✅ Ahora está definido
+      searchQuery: search, // Usamos el mismo término de búsqueda
+      currentPlatform: null
+    });
   } catch (error) {
     console.error('Error al obtener juegos:', error.message);
     res.status(500).send('Error interno del servidor');
@@ -52,33 +72,59 @@ exports.gamesController = {
 
 exports.searchGames = async (req, res) => {
   try {
-    const query = req.query.q; // Término de búsqueda
-    const platformFilter = req.query.platform; // Filtro opcional por plataforma
+    const searchQuery = req.query.q || ''; // Término de búsqueda (ej: "?q=among")
+    const page = parseInt(req.query.page) || 1; // Página actual (default: 1)
+    const limit = 10; // Juegos por página
+    const skip = (page - 1) * limit;
 
-    // Construye el objeto de búsqueda
-    const searchQuery = {
-      title: { $regex: query, $options: 'i' } // Búsqueda insensible a mayúsculas
+    // Query de búsqueda
+    const query = {
+      title: { $regex: searchQuery, $options: 'i' } // Búsqueda insensible a mayúsculas
     };
 
-    // Añade filtro por plataforma si existe
-    if (platformFilter) {
-      searchQuery.platform = platformFilter;
-    }
+    // Total de juegos y páginas
+    const totalGames = await Game.countDocuments(query);
+    const totalPages = Math.ceil(totalGames / limit);
 
-    // Ejecuta la búsqueda
-    const games = await Game.find(searchQuery);
+    // Juegos paginados
+    const games = await Game.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    // Renderiza la vista de resultados
     res.render('searchResults', {
       games,
-      searchQuery: query,
-      currentPlatform: platformFilter || null
+      searchQuery, // Para mantener el término en la vista
+      currentPage: page,
+      totalPages,
+      currentPlatform: null
     });
 
-  } catch (err) {
-    console.error('Error en searchController:', err);
-    res.status(500).render('error', { 
-      message: 'Error al procesar la búsqueda' 
+  } catch (error) {
+    console.error('Error en búsqueda:', error);
+    res.status(500).render('error', { message: 'Error al procesar la búsqueda' });
+  }
+};
+
+exports.getPaginatedGames = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // Página actual (default: 1)
+    const limit = 10; // Juegos por página
+    const skip = (page - 1) * limit;
+
+    const totalGames = await Game.countDocuments();
+    const totalPages = Math.ceil(totalGames / limit);
+
+    const games = await Game.find()
+      .skip(skip)
+      .limit(limit);
+
+    res.render('games', {
+      games,
+      currentPage: page,
+      totalPages
     });
+  } catch (err) {
+    res.status(500).render('error', { message: 'Error al cargar juegos' });
   }
 };
