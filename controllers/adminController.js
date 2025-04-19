@@ -34,15 +34,16 @@ exports.login = async (req, res) => {
     }
 
     const secret = Buffer.from(process.env.JWT_SECRET, 'base64');
+    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
     // 2. Crea sesión/token
-    const token = jwt.sign({ user: username }, secret, { expiresIn: '1h' });
+    const token = jwt.sign({ user: username }, secret, { expiresIn: '24h' });
 
     // 3. Envía token como cookie
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Solo en producción
-      maxAge: 3600000 // 1 hora
+      maxAge: ONE_DAY_IN_MS
     });
 
     // 4. Redirige al panel
@@ -79,16 +80,34 @@ exports.getUploadForm = (req, res) => {
 
 exports.uploadGame = async (req, res) => {
   try {
-    if (!req.files?.image?.length || !req.files?.captures?.length) {
-      throw new Error('No se subieron todas las imágenes requeridas');
+    // Validación básica de archivos
+    if (!req.files || !req.files.image || !req.files.image[0]) {
+      throw new Error('La imagen principal no fue subida.');
     }
 
-    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, minRequirements, recRequirements, releaseDate, lastUpdate, details } = req.body;
+    if (!req.files.captures || req.files.captures.length === 0) {
+      throw new Error('Se requieren al menos una captura.');
+    }
 
-    const buildFilePath = (folder, filename) => `/uploads/${folder}/${filename}`;
-    const folderName = title.replace(/\s+/g, '_');
-    const imageUrl = buildFilePath(folderName, req.files.image[0].filename);
-    const captures = req.files.captures.map(file => buildFilePath(folderName, file.filename));
+    const {
+      title,
+      description,
+      platform,
+      genre,
+      langText,
+      langVoices,
+      fileSize,
+      downloadLink,
+      minRequirements,
+      recRequirements,
+      releaseDate,
+      lastUpdate,
+      details
+    } = req.body;
+
+    // Obtener URLs directas desde Cloudflare R2
+    const imageUrl = req.files.image[0].location;
+    const captures = req.files.captures.map(file => file.location);
 
     const newGame = new Game({
       title,
@@ -108,13 +127,22 @@ exports.uploadGame = async (req, res) => {
       captures,
     });
 
+    if (!title || !description || !platform) {
+      return res.status(400).render('admin/upload', {
+        error: 'Completa todos los campos obligatorios.'
+      });
+    }    
+
     await newGame.save();
+
+    // Redirigir con éxito
     res.redirect('/?success=Juego subido correctamente');
   } catch (error) {
-    console.error(`Error al subir el juego (${req.body.title}):`, error.message);
+    console.error(`❌ Error al subir el juego (${req.body.title}):`, error.message);
     res.status(500).render('admin/upload', { error: 'Hubo un problema al subir el juego. Inténtalo de nuevo.' });
   }
 };
+
 
 exports.getEditForm = async (req, res) => {
   try {
@@ -142,7 +170,7 @@ exports.editGame = async (req, res) => {
     if (!game) {
       return res.redirect('/?error=Juego no encontrado');
     }
-    
+
     game.title = title;
     game.description = description;
     game.platform = platform;

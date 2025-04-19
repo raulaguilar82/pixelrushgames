@@ -20,9 +20,9 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-      imgSrc: ["'self'", "data:"],
+      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+      styleSrc: ["'self'", "https://cdn.jsdelivr.net"],
+      imgSrc: ["'self'", "data:", "https://*.r2.cloudflarestorage.com"],
       connectSrc: ["'self'", "https://discord.com"],
       frameSrc: ["'none'"], // Bloquea iframes
       objectSrc: ["'none'"] // Bloquea Flash/Java
