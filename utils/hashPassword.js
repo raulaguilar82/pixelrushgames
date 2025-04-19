@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const readline = require('readline').createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 readline.question('Introduce la contraseña a hashear: ', async (password) => {

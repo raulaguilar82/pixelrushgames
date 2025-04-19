@@ -1,4 +1,4 @@
-require("./middlewares/instrument.js");
+require('./middlewares/instrument.js');
 
 const express = require('express');
 const app = express();
@@ -13,27 +13,36 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-const Sentry = require("@sentry/node");
+const Sentry = require('@sentry/node');
 
 const helmet = require('helmet');
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
-      styleSrc: ["'self'", "https://cdn.jsdelivr.net"],
-      imgSrc: ["'self'", "data:", "https://*.r2.cloudflarestorage.com"],
-      connectSrc: ["'self'", "https://discord.com"],
-      frameSrc: ["'none'"], // Bloquea iframes
-      objectSrc: ["'none'"] // Bloquea Flash/Java
-    }
-  },
-  hsts: { maxAge: 63072000, includeSubDomains: true } // HSTS forzado
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
+        styleSrc: ["'self'", 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https://*.r2.cloudflarestorage.com'],
+        connectSrc: ["'self'", 'https://discord.com'],
+        frameSrc: ["'none'"], // Bloquea iframes
+        objectSrc: ["'none'"], // Bloquea Flash/Java
+      },
+    },
+    hsts: { maxAge: 63072000, includeSubDomains: true }, // HSTS forzado
+  })
+);
 
 // Verifica si las variables de entorno requeridas están definidas
-const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'JWT_SECRET', 'NODE_ENV', 'PORT'];
-requiredEnvVars.forEach(env => {
+const requiredEnvVars = [
+  'MONGODB_URI',
+  'ADMIN_USERNAME',
+  'ADMIN_PASSWORD',
+  'JWT_SECRET',
+  'NODE_ENV',
+  'PORT',
+];
+requiredEnvVars.forEach((env) => {
   if (!process.env[env]) {
     console.error(`Falta la variable de entorno: ${env}`);
     process.exit(1); // Detiene el servidor si falta una variable
@@ -45,10 +54,11 @@ app.set('view engine', 'ejs'); // Motor de plantillas
 app.set('views', path.join(__dirname, 'views')); // Carpeta de vistas
 
 // Conexión a MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log('Conectado a MongoDB'))
   .catch((err) => console.error('Error de conexión:', err));
 
@@ -73,18 +83,19 @@ app.use('/games', require('./routes/games.routes'));
 
 // Evita ejecución de scripts en la carpeta de uploads
 const uploadsMiddleware = require('./middlewares/uploads');
-const { report } = require('process');
 app.use('/uploads', uploadsMiddleware);
 
 Sentry.setupExpressErrorHandler(app);
 
 // Middleware para manejar errores
-app.use(function onError(err, req, res, next) {
+app.use(function onError(err, req, res) {
   res.statusCode = 500;
-  res.end(res.sentry + "\n");
+  res.end(res.sentry + '\n');
 });
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT} en modo ${process.env.NODE_ENV || 'development'}`);
+  console.log(
+    `Servidor corriendo en http://localhost:${PORT} en modo ${process.env.NODE_ENV || 'development'}`
+  );
 });

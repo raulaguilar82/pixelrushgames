@@ -8,9 +8,7 @@ exports.getHome = async (req, res) => {
     const skip = (page - 1) * limit;
 
     // Construye el query de búsqueda
-    const query = search 
-      ? { title: { $regex: search, $options: 'i' } } 
-      : {};
+    const query = search ? { title: { $regex: search, $options: 'i' } } : {};
 
     // Obtén el total de juegos (para calcular páginas)
     const totalGames = await Game.countDocuments(query);
@@ -22,12 +20,12 @@ exports.getHome = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-    res.render('index', { 
+    res.render('index', {
       games,
       currentPage: page, // ✅ Ahora está definido
-      totalPages,       // ✅ Ahora está definido
+      totalPages, // ✅ Ahora está definido
       searchQuery: search, // Usamos el mismo término de búsqueda
-      currentPlatform: null
+      currentPlatform: null,
     });
   } catch (error) {
     console.error('Error al obtener juegos:', error.message);
@@ -37,15 +35,15 @@ exports.getHome = async (req, res) => {
 
 exports.getDMCA = (req, res) => {
   res.render('dmca');
-}
+};
 
 exports.getContact = (req, res) => {
   res.render('contact');
-}
+};
 
 exports.getBrokenURL = (req, res) => {
   res.render('brokenURL');
-}
+};
 
 exports.gamesController = {
   getAllGames: async (req, res) => {
@@ -64,7 +62,7 @@ exports.gamesController = {
           .sort({ createdAt: -1 }) // Ordena por fecha descendente
           .skip(skip)
           .limit(limit),
-        Game.countDocuments(query) // Total de juegos (para calcular páginas)
+        Game.countDocuments(query), // Total de juegos (para calcular páginas)
       ]);
 
       const totalPages = Math.ceil(totalGames / limit);
@@ -74,13 +72,15 @@ exports.gamesController = {
         currentPage: page,
         totalPages,
         search: req.query.search || '',
-        currentPlatform: platformFilter // Para el navbar
+        currentPlatform: platformFilter, // Para el navbar
       });
     } catch (err) {
       console.error('Error al obtener juegos:', err);
-      res.status(500).render('error', { message: 'Error al cargar los juegos' });
+      res
+        .status(500)
+        .render('error', { message: 'Error al cargar los juegos' });
     }
-  }
+  },
 };
 
 exports.searchGames = async (req, res) => {
@@ -92,7 +92,7 @@ exports.searchGames = async (req, res) => {
 
     // Query de búsqueda
     const query = {
-      title: { $regex: searchQuery, $options: 'i' } // Búsqueda insensible a mayúsculas
+      title: { $regex: searchQuery, $options: 'i' }, // Búsqueda insensible a mayúsculas
     };
 
     // Total de juegos y páginas
@@ -110,12 +110,13 @@ exports.searchGames = async (req, res) => {
       searchQuery, // Para mantener el término en la vista
       currentPage: page,
       totalPages,
-      currentPlatform: null
+      currentPlatform: null,
     });
-
   } catch (error) {
     console.error('Error en búsqueda:', error);
-    res.status(500).render('error', { message: 'Error al procesar la búsqueda' });
+    res
+      .status(500)
+      .render('error', { message: 'Error al procesar la búsqueda' });
   }
 };
 
@@ -128,16 +129,14 @@ exports.getPaginatedGames = async (req, res) => {
     const totalGames = await Game.countDocuments();
     const totalPages = Math.ceil(totalGames / limit);
 
-    const games = await Game.find()
-      .skip(skip)
-      .limit(limit);
+    const games = await Game.find().skip(skip).limit(limit);
 
     res.render('games', {
       games,
       currentPage: page,
-      totalPages
+      totalPages,
     });
-  } catch (err) {
+  } catch {
     res.status(500).render('error', { message: 'Error al cargar juegos' });
   }
 };

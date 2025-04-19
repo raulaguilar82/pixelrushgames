@@ -9,7 +9,8 @@ document.querySelector('#upload-form').addEventListener('submit', (e) => {
   const captureFiles = document.querySelector('#captures').files;
 
   // Validar tamaño de la imagen principal
-  if (imageFile && imageFile.size > 5 * 1024 * 1024) { // 5 MB
+  if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+    // 5 MB
     e.preventDefault();
     errorMessage.style.display = 'block';
     errorMessage.textContent = 'La imagen principal no puede superar los 5 MB.';
@@ -28,7 +29,8 @@ document.querySelector('#upload-form').addEventListener('submit', (e) => {
 
   // Validar tamaño de cada captura
   for (const file of captureFiles) {
-    if (file.size > 5 * 1024 * 1024) { // 5 MB
+    if (file.size > 5 * 1024 * 1024) {
+      // 5 MB
       e.preventDefault();
       errorMessage.style.display = 'block';
       errorMessage.textContent = `El archivo "${file.name}" supera los 5 MB.`;

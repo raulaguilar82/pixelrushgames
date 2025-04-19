@@ -1,5 +1,4 @@
 const Game = require('../models/Game');
-const slugify = require('slugify');
 
 exports.getGameBySlug = async (req, res) => {
   try {
@@ -9,7 +8,7 @@ exports.getGameBySlug = async (req, res) => {
     // Obtener juegos recomendados (misma plataforma, excluyendo el actual)
     const recommendedGames = await Game.find({
       platform: game.platform,
-      _id: { $ne: game._id } // Excluye el juego actual
+      _id: { $ne: game._id }, // Excluye el juego actual
     })
       .limit(6) // 6 juegos recomendados
       .sort({ createdAt: -1 });
@@ -18,9 +17,9 @@ exports.getGameBySlug = async (req, res) => {
       game,
       recommendedGames,
       title: game.title,
-      currentPlatform: null
+      currentPlatform: null,
     });
-  } catch (error) {
+  } catch {
     res.status(500).render('error', { message: 'Error al cargar el juego' });
   }
 };

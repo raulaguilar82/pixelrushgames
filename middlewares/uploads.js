@@ -2,11 +2,28 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const fileType = require('file-type');
+const Sentry = require('@sentry/node');
 
 const dangerousExtensions = [
-  '.js', '.php', '.html', '.sh', '.exe', '.bat', '.cmd', 
-  '.pl', '.py', '.rb', '.cgi', '.jsp', '.asp', '.aspx',
-  '.jar', '.war', '.ps1', '.msi', '.dll'
+  '.js',
+  '.php',
+  '.html',
+  '.sh',
+  '.exe',
+  '.bat',
+  '.cmd',
+  '.pl',
+  '.py',
+  '.rb',
+  '.cgi',
+  '.jsp',
+  '.asp',
+  '.aspx',
+  '.jar',
+  '.war',
+  '.ps1',
+  '.msi',
+  '.dll',
 ];
 
 const isDangerousFile = (filePath) => {
@@ -16,7 +33,7 @@ const isDangerousFile = (filePath) => {
 
 const uploadsMiddleware = (req, res, next) => {
   const filePath = path.join('public/uploads', req.path);
-  
+
   // 1. Verificar existencia del archivo
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
@@ -27,9 +44,11 @@ const uploadsMiddleware = (req, res, next) => {
     if (isDangerousFile(filePath)) {
       Sentry.captureMessage(`Intento de subida peligrosa: ${filePath}`, {
         level: 'warning',
-        extra: { ip: req.ip, userAgent: req.headers['user-agent'] }
+        extra: { ip: req.ip, userAgent: req.headers['user-agent'] },
       });
-      return res.status(403).send('Acceso prohibido: tipo de archivo no permitido');
+      return res
+        .status(403)
+        .send('Acceso prohibido: tipo de archivo no permitido');
     }
 
     // 3. (Opcional) Verificación MIME type real
@@ -40,7 +59,7 @@ const uploadsMiddleware = (req, res, next) => {
       if (type && dangerousExtensions.includes(`.${type.ext}`)) {
         console.warn(`⚠️ Archivo disfrazado detectado: ${filePath}`, {
           reportedType: type.mime,
-          actualExt: path.extname(filePath)
+          actualExt: path.extname(filePath),
         });
         return res.status(403).send('Archivo no permitido');
       }

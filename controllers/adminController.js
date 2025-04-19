@@ -1,9 +1,12 @@
 const Game = require('../models/Game');
-const path = require('path');
-const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const {
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+} = require('@aws-sdk/client-s3');
+const { s3 } = require('../config/s3Client.js');
 
 // --------------- Sección de Autenticación --------------- //
 
@@ -11,7 +14,7 @@ const jwt = require('jsonwebtoken');
 exports.showLogin = (req, res) => {
   res.render('admin/login', {
     error: null,
-    success: req.query.success // Para mensajes de éxito
+    success: req.query.success, // Para mensajes de éxito
   });
 };
 
@@ -22,14 +25,17 @@ exports.login = async (req, res) => {
   try {
     if (!username || !password) {
       return res.render('admin/login', {
-        error: 'Por favor, ingresa un nombre de usuario y contraseña'
+        error: 'Por favor, ingresa un nombre de usuario y contraseña',
       });
     }
 
     // 1. Verifica credenciales (usa variables de entorno)
-    if (username !== process.env.ADMIN_USERNAME || !(await bcrypt.compare(password, process.env.ADMIN_PASSWORD))) {
+    if (
+      username !== process.env.ADMIN_USERNAME ||
+      !(await bcrypt.compare(password, process.env.ADMIN_PASSWORD))
+    ) {
       return res.render('admin/login', {
-        error: 'Credenciales incorrectas'
+        error: 'Credenciales incorrectas',
       });
     }
 
@@ -43,15 +49,14 @@ exports.login = async (req, res) => {
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Solo en producción
-      maxAge: ONE_DAY_IN_MS
+      maxAge: ONE_DAY_IN_MS,
     });
 
     // 4. Redirige al panel
     res.redirect('/admin/panel');
-
-  } catch (error) {
+  } catch {
     res.render('admin/login', {
-      error: 'Error en el servidor'
+      error: 'Error en el servidor',
     });
   }
 };
@@ -60,7 +65,6 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   res.clearCookie('jwt').redirect('/admin/login');
 };
-
 
 // --------------- Sección de Gestión de Juegos --------------- //
 
@@ -102,12 +106,12 @@ exports.uploadGame = async (req, res) => {
       recRequirements,
       releaseDate,
       lastUpdate,
-      details
+      details,
     } = req.body;
 
     // Obtener URLs directas desde Cloudflare R2
     const imageUrl = req.files.image[0].location;
-    const captures = req.files.captures.map(file => file.location);
+    const captures = req.files.captures.map((file) => file.location);
 
     const newGame = new Game({
       title,
@@ -129,20 +133,24 @@ exports.uploadGame = async (req, res) => {
 
     if (!title || !description || !platform) {
       return res.status(400).render('admin/upload', {
-        error: 'Completa todos los campos obligatorios.'
+        error: 'Completa todos los campos obligatorios.',
       });
-    }    
+    }
 
     await newGame.save();
 
     // Redirigir con éxito
     res.redirect('/?success=Juego subido correctamente');
   } catch (error) {
-    console.error(`❌ Error al subir el juego (${req.body.title}):`, error.message);
-    res.status(500).render('admin/upload', { error: 'Hubo un problema al subir el juego. Inténtalo de nuevo.' });
+    console.error(
+      `❌ Error al subir el juego (${req.body.title}):`,
+      error.message
+    );
+    res.status(500).render('admin/upload', {
+      error: 'Hubo un problema al subir el juego. Inténtalo de nuevo.',
+    });
   }
 };
-
 
 exports.getEditForm = async (req, res) => {
   try {
@@ -164,7 +172,21 @@ exports.getEditForm = async (req, res) => {
 
 exports.editGame = async (req, res) => {
   try {
-    const { title, description, platform, genre, langText, langVoices, fileSize, downloadLink, minRequirements, recRequirements, releaseDate, lastUpdate, details } = req.body;
+    const {
+      title,
+      description,
+      platform,
+      genre,
+      langText,
+      langVoices,
+      fileSize,
+      downloadLink,
+      minRequirements,
+      recRequirements,
+      releaseDate,
+      lastUpdate,
+      details,
+    } = req.body;
 
     const game = await Game.findById(req.params.id);
     if (!game) {
@@ -206,7 +228,10 @@ exports.getConfirmDelete = async (req, res) => {
       success: req.query.success, // Para mensajes de éxito
     });
   } catch (error) {
-    console.error('Error al cargar la confirmación de eliminación:', error.message);
+    console.error(
+      'Error al cargar la confirmación de eliminación:',
+      error.message
+    );
     res.redirect('/?error=Error al cargar la confirmación de eliminación');
   }
 };
@@ -216,12 +241,34 @@ exports.deleteGame = async (req, res) => {
     const game = await Game.findById(req.params.id);
     if (!game) return res.redirect('/?error=Juego no encontrado');
 
-    const gameFolder = path.join(__dirname, '../public/uploads', game.title.replace(/\s+/g, '_'));
-    if (fs.existsSync(gameFolder)) {
-      fs.rmSync(gameFolder, { recursive: true, force: true });
+    // 1) Extraer keys desde las URLs
+    const imageKey = new URL(game.imageUrl).pathname.slice(1);
+    const capturesKeys = game.captures.map((url) =>
+      new URL(url).pathname.slice(1)
+    );
+
+    // 2) Eliminar en R2
+    await s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.R2_BUCKET,
+        Key: imageKey,
+      })
+    );
+    if (capturesKeys.length) {
+      await s3.send(
+        new DeleteObjectsCommand({
+          Bucket: process.env.R2_BUCKET,
+          Delete: {
+            Objects: capturesKeys.map((Key) => ({ Key })),
+            Quiet: false,
+          },
+        })
+      );
     }
 
+    // 3) Eliminar en MongoDB
     await Game.deleteOne({ _id: req.params.id });
+
     res.redirect('/?success=Juego eliminado correctamente');
   } catch (error) {
     console.error('Error al eliminar el juego:', error.message);

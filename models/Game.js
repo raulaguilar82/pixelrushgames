@@ -18,15 +18,15 @@ const gameSchema = new mongoose.Schema({
   releaseDate: { type: String, required: true },
   lastUpdate: { type: String, required: true },
   details: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
-gameSchema.pre('save', function(next) {
+gameSchema.pre('save', function (next) {
   this.slug = slugify(this.title, { lower: true, strict: true });
   next();
 });
 
-gameSchema.methods.deleteGame = async function() {
+gameSchema.methods.deleteGame = async function () {
   try {
     await this.deleteOne();
     return true;
