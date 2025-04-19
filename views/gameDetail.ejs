@@ -3,7 +3,7 @@
 
 <head>
   <title>
-    <%= title %>
+    <%= title %> | PixelRushGames
   </title>
   <%- include('partials/head') %>
   <link rel="stylesheet" href="/css/gameDetail.css">
@@ -24,7 +24,18 @@
 
   <main class="bd-container">
 
-    <div>hola</div>
+    <section class="recommended-section left-pc">
+      <h2>Juegos recomendados</h2>
+      <div class="br-td mt-0"></div>
+      <div class="recommended-grid">
+        <% recommendedGames.forEach(recommended => { %>
+          <a href="/games/<%= recommended.slug %>" class="recommended-card">
+            <img src="<%= recommended.imageUrl %>" alt="<%= recommended.title %>">
+            <h3><%= recommended.title %></h3>
+          </a>
+        <% }) %>
+      </div>
+    </section>
 
     <div class="cont-container">
       <div class="row">
@@ -177,6 +188,20 @@
         </div>
       </div>
     </div>
+
+    <section class="recommended-section bottom-mobile">
+      <h2>Juegos recomendados</h2>
+      <div class="br-td mt-0"></div>
+      <div class="recommended-grid">
+        <% recommendedGames.forEach(recommended => { %>
+          <a href="/games/<%= recommended.slug %>" class="recommended-card">
+            <img src="<%= recommended.imageUrl %>" alt="<%= recommended.title %>">
+            <h3><%= recommended.title %></h3>
+          </a>
+        <% }) %>
+      </div>
+    </section>
+
   </main>
 
   <%- include('partials/footer') %>

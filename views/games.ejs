@@ -15,8 +15,11 @@
         <div class="grid-container">
 
             <div class="page-title">
-                <h2>Juegos <%= currentPlatform ? `para ${currentPlatform}` : '' %></h2>
+                <h2>Juegos <%= currentPlatform ? `para ${currentPlatform}` : '' %>
+                </h2>
             </div>
+
+            <div class="br-tdtd"></div>
 
             <div class="games-grid">
 
@@ -30,6 +33,40 @@
 
             </div>
         </div>
+
+        <div class="pagination">
+            <% if (currentPage> 1) { %>
+                <a href="?page=<%= currentPage - 1 %><%= currentPlatform ? `&platform=${currentPlatform}` : '' %>"
+                    class="pagination-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <% } %>
+
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                        <a href="?page=<%= i %><%= currentPlatform ? `&platform=${currentPlatform}` : '' %>"
+                            class="<%= i === currentPage ? 'active' : '' %>">
+                            <%= i %>
+                        </a>
+                        <% } %>
+
+                            <% if (currentPage < totalPages) { %>
+                                <a href="?page=<%= currentPage + 1 %><%= currentPlatform ? `&platform=${currentPlatform}` : '' %>"
+                                    class="pagination-arrow">
+                                    <span class="sr-only">Siguiente</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                                <% } %>
+        </div>
+
     </main>
 
     <%- include('partials/footer') %>

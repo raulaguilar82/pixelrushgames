@@ -5,6 +5,10 @@ const verifyJWT = require('../middlewares/auth');
 const { authLimiter } = require('../middlewares/rateLimiter');
 const upload = require('../middlewares/multer');
 
+// Todas las rutas de admin requieren IP autorizada
+const ipRestriction = require('../middlewares/ipRestriction');
+router.use(ipRestriction);
+
 // Rutas públicas
 router.get('/login', adminController.showLogin);
 router.post('/login', authLimiter, adminController.login);

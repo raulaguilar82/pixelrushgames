@@ -1,3 +1,5 @@
+require("./middlewares/instrument.js");
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -11,16 +13,23 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+const Sentry = require("@sentry/node");
+
 const helmet = require('helmet');
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    connectSrc: ["'self'", "https://discord.com"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-    styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"]
-  }
-})
-);
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'", "https://discord.com"],
+      frameSrc: ["'none'"], // Bloquea iframes
+      objectSrc: ["'none'"] // Bloquea Flash/Java
+    }
+  },
+  hsts: { maxAge: 63072000, includeSubDomains: true } // HSTS forzado
+}));
 
 // Verifica si las variables de entorno requeridas están definidas
 const requiredEnvVars = ['MONGODB_URI', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'JWT_SECRET', 'NODE_ENV', 'PORT'];
@@ -30,11 +39,6 @@ requiredEnvVars.forEach(env => {
     process.exit(1); // Detiene el servidor si falta una variable
   }
 });
-
-// Middlewares
-app.use(express.static('public')); // Carpeta para archivos estáticos
-app.use(express.json()); // Analiza cuerpos JSON
-app.use(express.urlencoded({ extended: true })); // Analiza cuerpos URL-encoded
 
 // Configuración de vistas
 app.set('view engine', 'ejs'); // Motor de plantillas
@@ -57,6 +61,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middlewares
+app.use(express.static('public')); // Carpeta para archivos estáticos
+app.use(express.json()); // Analiza cuerpos JSON
+app.use(express.urlencoded({ extended: true })); // Analiza cuerpos URL-encoded
+
 // Rutas
 app.use('/', require('./routes/home.routes'));
 app.use('/admin', require('./routes/admin.routes'));
@@ -67,10 +76,12 @@ const uploadsMiddleware = require('./middlewares/uploads');
 const { report } = require('process');
 app.use('/uploads', uploadsMiddleware);
 
+Sentry.setupExpressErrorHandler(app);
+
 // Middleware para manejar errores
-app.use((err, req, res, next) => {
-  console.error('Error no manejado:', err.message);
-  res.status(500).send('Error interno del servidor');
+app.use(function onError(err, req, res, next) {
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
 });
 
 // Iniciar servidor

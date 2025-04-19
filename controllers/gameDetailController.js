@@ -4,21 +4,23 @@ const slugify = require('slugify');
 exports.getGameBySlug = async (req, res) => {
   try {
     const game = await Game.findOne({ slug: req.params.slug });
-    
-    if (!game) {
-      return res.status(404).render('notFound', { 
-        message: `El juego "${req.params.slug}" no existe` 
-      });
-    }
+    if (!game) return res.status(404).render('404');
 
-    res.render('gameDetail', { 
+    // Obtener juegos recomendados (misma plataforma, excluyendo el actual)
+    const recommendedGames = await Game.find({
+      platform: game.platform,
+      _id: { $ne: game._id } // Excluye el juego actual
+    })
+      .limit(6) // 6 juegos recomendados
+      .sort({ createdAt: -1 });
+
+    res.render('gameDetail', {
       game,
-      title: game.title // Para el <title> de la página
+      recommendedGames,
+      title: game.title,
+      currentPlatform: null
     });
-  } catch (err) {
-    console.error('Error en getGameBySlug:', err);
-    res.status(500).render('error', { 
-      message: 'Error al cargar el juego' 
-    });
+  } catch (error) {
+    res.status(500).render('error', { message: 'Error al cargar el juego' });
   }
 };

@@ -51,15 +51,28 @@ exports.gamesController = {
   getAllGames: async (req, res) => {
     try {
       const platformFilter = req.query.platform; // "PC" o "ANDROID"
-      let games = await Game.find();
+      const page = parseInt(req.query.page) || 1; // Página actual (default: 1)
+      const limit = 10; // Juegos por página
+      const skip = (page - 1) * limit;
 
-      // Filtrado por plataforma (si existe el query)
-      if (platformFilter) {
-        games = games.filter(game => game.platform === platformFilter);
-      }
+      // Construye el query de filtrado
+      const query = platformFilter ? { platform: platformFilter } : {};
+
+      // Consulta a la base de datos con filtro, paginación y conteo
+      const [games, totalGames] = await Promise.all([
+        Game.find(query)
+          .sort({ createdAt: -1 }) // Ordena por fecha descendente
+          .skip(skip)
+          .limit(limit),
+        Game.countDocuments(query) // Total de juegos (para calcular páginas)
+      ]);
+
+      const totalPages = Math.ceil(totalGames / limit);
 
       res.render('games', {
         games,
+        currentPage: page,
+        totalPages,
         search: req.query.search || '',
         currentPlatform: platformFilter // Para el navbar
       });
