@@ -14,8 +14,9 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: (req, file, cb) => {
+      const folder = req.body.folder || 'uploads';
       const filename = `${Date.now()}-${file.originalname}`;
-      cb(null, filename);
+      cb(null, `${folder}/${filename}`);
     },
   }),
   limits: { fileSize: 5 * 1024 * 1024 },

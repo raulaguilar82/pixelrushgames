@@ -10,7 +10,6 @@ document.querySelector('#upload-form').addEventListener('submit', (e) => {
 
   // Validar tamaño de la imagen principal
   if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-    // 5 MB
     e.preventDefault();
     errorMessage.style.display = 'block';
     errorMessage.textContent = 'La imagen principal no puede superar los 5 MB.';
@@ -39,6 +38,5 @@ document.querySelector('#upload-form').addEventListener('submit', (e) => {
     }
   }
 
-  // Deshabilitar el botón de envío mientras se procesa
   submitButton.disabled = true;
 });

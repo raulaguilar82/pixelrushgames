@@ -26,7 +26,7 @@ router.get('/panel', adminController.getPanel);
 // Mostrar formulario de subida de juego
 router.get('/upload', adminController.getUploadForm);
 
-// // Procesar subida de juego
+// Procesar subida de juego
 router.post(
   '/upload',
   upload.fields([

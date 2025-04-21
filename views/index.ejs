@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-  <meta name="description" content="PixelRushGames - Descarga juegos APK y para PC totalmente gratis.">
+  <meta name="description" content="PixelRushGames - Juegos Full Español APK y PC.">
   <title>PixelRushGames - Juegos PC y Android Full Español</title>
 
   <%- include('partials/head') %>
@@ -34,7 +34,11 @@
 
                 <% } else { %>
                   <div class="no-results">
-                    <p>No se encontraron resultados para "<%= search %>".</p>
+                    <% if (searchQuery) { %>
+                      No se encontraron resultados para "<%= searchQuery %>".
+                    <% } else { %>
+                      No hay juegos disponibles.
+                    <% } %>
                   </div>
                   <% } %>
 
@@ -43,34 +47,8 @@
 
       <div class="br-tdtd mb-0"></div>
 
-      <div class="pagination">
-        <% if (currentPage > 1) { %>
-          <a href="/search?q=<%= searchQuery %>&page=<%= currentPage - 1 %>" class="pagination-arrow">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="sr-only">Anterior</span>
-          </a>
-        <% } %>
-      
-        <% for (let i = 1; i <= totalPages; i++) { %>
-          <a 
-            href="?page=<%= i %><%= searchQuery ? `&search=${searchQuery}` : '' %>" 
-            class="<%= i === currentPage ? 'active' : '' %>"
-          >
-            <%= i %>
-          </a>
-        <% } %>
-      
-        <% if (currentPage < totalPages) { %>
-          <a href="/search?q=<%= searchQuery %>&page=<%= currentPage + 1 %>" class="pagination-arrow">
-            <span class="sr-only">Siguiente</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        <% } %>
-      </div>
+      <%- include('partials/pagination') %>
+
     </div>
 
   </main>
