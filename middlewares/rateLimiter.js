@@ -8,12 +8,12 @@ exports.authLimiter = rateLimit({
 
 exports.deleteLimiter = rateLimit({
   windowMs: 1440 * 60 * 1000,
-  max: 20,
+  max: 5,
   message: 'Espera hasta mañana',
 });
 
 exports.uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 5,
+  max: 1,
   message: 'Espera 1 hora entre subidas',
 });
