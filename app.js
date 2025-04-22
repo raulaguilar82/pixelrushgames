@@ -1,7 +1,13 @@
-require('./config/instrument');
 require('dotenv').config();
 const express = require('express');
 const app = express();
+
+const { PostHog } = require('posthog-node');
+
+const client = new PostHog(process.env.POSTHOG_TOKEN, {
+  host: 'https://us.i.posthog.com',
+  enableExceptionAutocapture: true,
+});
 
 const path = require('path');
 const PORT = process.env.PORT;
@@ -18,7 +24,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
         styleSrc: ["'self'", 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'https://*.r2.cloudflarestorage.com'],
+        imgSrc: ["'self'", 'data:', 'https://assets.pixelrushgames.xyz'],
         connectSrc: ["'self'", 'https://discord.com'],
         frameSrc: ["'none'"],
         objectSrc: ["'none'"],

@@ -30,7 +30,7 @@
       <div class="recommended-grid">
         <% recommendedGames.forEach(recommended => { %>
           <a href="/games/<%= recommended.slug %>" class="recommended-card">
-            <img src="<%= recommended.imageUrl %>" alt="<%= recommended.title %>">
+            <img src="<%= recommended.imageUrl %>" loading="lazy" decoding="async" alt="<%= recommended.title %>">
             <h3><%= recommended.title %></h3>
           </a>
         <% }) %>
@@ -177,7 +177,7 @@
                 <div class="row g-3">
                   <% game.captures.forEach(capture=> { %>
                     <div class="col-md-13">
-                        <img src="<%= capture %>" class="w-100" alt="Captura de <%= game.title %>">
+                        <img src="<%= capture %>" loading="lazy" decoding="async" class="w-100" alt="Imagen de <%= game.title %>">
                     </div>
                     <% }); %>
                 </div>

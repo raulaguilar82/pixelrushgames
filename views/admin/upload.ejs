@@ -1,201 +1,231 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <title>Subir Juego | Panel de Admin</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subir Juego | Panel de Admin</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+      }
 
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 20px;
-    }
+      .upload-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-    .upload-container {
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
 
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+      .form-group {
+        margin-bottom: 15px;
+      }
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
+      input[type='text'],
+      textarea,
+      select {
+        width: 95%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
 
-    input[type="text"],
-    textarea,
-    select {
-      width: 95%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
+      textarea {
+        height: 100px;
+        resize: vertical;
+      }
 
-    textarea {
-      height: 100px;
-      resize: vertical;
-    }
+      .file-upload {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-    .file-upload {
-      border: 2px dashed #ccc;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
+      .btn-submit {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+      }
 
-    .btn-submit {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-    }
+      .btn-submit:hover {
+        background-color: #218838;
+      }
 
-    .btn-submit:hover {
-      background-color: #218838;
-    }
+      .error {
+        color: red;
+        font-size: 14px;
+      }
+    </style>
 
-    .error {
-      color: red;
-      font-size: 14px;
-    }
-  </style>
-</head>
+    <%- include('../partials/head') %>
+  </head>
 
-<body>
-  <div class="upload-container">
+  <body>
+    <div class="upload-container">
+      <h1>Subir Nuevo Juego</h1>
 
-    <h1>Subir Nuevo Juego</h1>
-
-    <!-- Formulario de subida -->
-    <form id="upload-form" action="/admin/upload" method="POST" enctype="multipart/form-data">
-
-      <!-- Título del Juego -->
-      <div class="form-group">
-        <label for="title">Título*</label>
-        <input type="text" id="title" name="title" required>
-      </div>
-
-      <!-- Descripción -->
-      <div class="form-group">
-        <label for="description">Descripción*</label>
-        <textarea id="description" name="description" required></textarea>
-      </div>
-
-      <!-- Generos -->
-      <div class="form-group">
-        <label for="genre">Generos*</label>
-        <input type="text" id="genre" name="genre" required>
-      </div>
-
-      <!-- Idiomas (texto) -->
-      <div class="form-group">
-        <label for="langText">Idiomas (Texto)*</label>
-        <input type="text" id="langText" name="langText" required>
-      </div>
-
-      <!-- Idiomas (voces) -->
-      <div class="form-group">
-        <label for="langVoices">Idiomas (Voces)*</label>
-        <input type="text" id="langVoices" name="langVoices" required>
-      </div>
-
-      <!-- Tamaño del archivo -->
-      <div class="form-group">
-        <label for="fileSize">Tamaño del archivo*</label>
-        <input type="text" id="fileSize" name="fileSize" required>
-      </div>
-
-      <!-- Plataforma -->
-      <div class="form-group">
-        <label for="platform">Plataforma*</label>
-        <select id="platform" name="platform" required>
-          <option value="">Seleccionar...</option>
-          <option value="PC">PC</option>
-          <option value="Android">Android</option>
-        </select>
-      </div>
-
-      <!-- Enlace de Descarga -->
-      <div class="form-group">
-        <label for="downloadLink">Enlace de Descarga* (URL)</label>
-        <input type="url" id="downloadLink" name="downloadLink" required placeholder="https://filepaste.com/...">
-      </div>
-
-      <!-- Portada del Juego -->
-      <div class="form-group">
-        <label>Portada del Juego*</label>
-        <div class="file-upload">
-          <input type="file" id="image" name="image" accept="image/*" required>
-          <p>Arrastra o selecciona una imagen (JPEG/PNG, max 5MB)</p>
+      <!-- Formulario de subida -->
+      <form
+        id="upload-form"
+        action="/admin/upload"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <!-- Título del Juego -->
+        <div class="form-group">
+          <label for="title">Título*</label>
+          <input type="text" id="title" name="title" required />
         </div>
-      </div>
 
-      <!-- Imagenes del Juego -->
-      <div class="form-group">
-        <label>Imágenes del Juego*</label>
-        <div class="file-upload">
-          <input type="file" id="captures" name="captures" accept="image/*" multiple required>
-          <p>Arrastra o selecciona varias imágenes (JPEG/PNG, max 5MB por imagen)</p>
+        <!-- Descripción -->
+        <div class="form-group">
+          <label for="description">Descripción*</label>
+          <textarea id="description" name="description" required></textarea>
         </div>
-      </div>
 
-      <!-- Requisitos Minimos -->
-      <div class="form-group">
-        <label for="minRequirements">Requisitos Minimos*</label>
-        <textarea id="minRequirements" name="minRequirements" required></textarea>
-      </div>
+        <!-- Generos -->
+        <div class="form-group">
+          <label for="genre">Generos*</label>
+          <input type="text" id="genre" name="genre" required />
+        </div>
 
-      <!-- Requisitos Recomendados -->
-      <div class="form-group">
-        <label for="recRequirements">Requisitos Recomendados*</label>
-        <textarea id="recRequirements" name="recRequirements" required></textarea>
-      </div>
+        <!-- Idiomas (texto) -->
+        <div class="form-group">
+          <label for="langText">Idiomas (Texto)*</label>
+          <input type="text" id="langText" name="langText" required />
+        </div>
 
-      <!-- releaseDate -->
-      <div class="form-group">
-        <label for="releaseDate">Fecha de Lanzamiento*</label>
-        <input type="text" id="releaseDate" name="releaseDate" required>
-      </div>
+        <!-- Idiomas (voces) -->
+        <div class="form-group">
+          <label for="langVoices">Idiomas (Voces)*</label>
+          <input type="text" id="langVoices" name="langVoices" required />
+        </div>
 
-      <!-- lastUpdate -->
-      <div class="form-group">
-        <label for="lastUpdate">Ultima Actualizacion*</label>
-        <input type="text" id="lastUpdate" name="lastUpdate" required>
-      </div>
+        <!-- Tamaño del archivo -->
+        <div class="form-group">
+          <label for="fileSize">Tamaño del archivo*</label>
+          <input type="text" id="fileSize" name="fileSize" required />
+        </div>
 
-      <!-- details -->
-      <div class="form-group">
-        <label for="file-size">Detalles*</label>
-        <input type="text" id="details" name="details" required>
-      </div>
+        <!-- Plataforma -->
+        <div class="form-group">
+          <label for="platform">Plataforma*</label>
+          <select id="platform" name="platform" required>
+            <option value="">Seleccionar...</option>
+            <option value="PC">PC</option>
+            <option value="Android">Android</option>
+          </select>
+        </div>
 
-      <!-- Botón de Envío -->
-      <div id="error-message" style="color: red; display: none;"></div>
-      <button type="submit" class="btn-submit">Subir Juego</button>
-    </form>
+        <!-- Enlace de Descarga -->
+        <div class="form-group">
+          <label for="downloadLink">Enlace de Descarga* (URL)</label>
+          <input
+            type="url"
+            id="downloadLink"
+            name="downloadLink"
+            required
+            placeholder="https://filepaste.com/..."
+          />
+        </div>
 
-  </div>
-  <script src="/js/upload-validation.js"></script>
-</body>
+        <!-- Portada del Juego -->
+        <div class="form-group">
+          <label>Portada del Juego*</label>
+          <div class="file-upload">
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              required
+            />
+            <p>Arrastra o selecciona una imagen (JPEG/PNG, max 5MB)</p>
+          </div>
+        </div>
 
+        <!-- Imagenes del Juego -->
+        <div class="form-group">
+          <label>Imágenes del Juego*</label>
+          <div class="file-upload">
+            <input
+              type="file"
+              id="captures"
+              name="captures"
+              accept="image/*"
+              multiple
+              required
+            />
+            <p>
+              Arrastra o selecciona varias imágenes (JPEG/PNG, max 5MB por
+              imagen)
+            </p>
+          </div>
+        </div>
+
+        <!-- Requisitos Minimos -->
+        <div class="form-group">
+          <label for="minRequirements">Requisitos Minimos*</label>
+          <textarea
+            id="minRequirements"
+            name="minRequirements"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Requisitos Recomendados -->
+        <div class="form-group">
+          <label for="recRequirements">Requisitos Recomendados*</label>
+          <textarea
+            id="recRequirements"
+            name="recRequirements"
+            required
+          ></textarea>
+        </div>
+
+        <!-- releaseDate -->
+        <div class="form-group">
+          <label for="releaseDate">Fecha de Lanzamiento*</label>
+          <input type="text" id="releaseDate" name="releaseDate" required />
+        </div>
+
+        <!-- lastUpdate -->
+        <div class="form-group">
+          <label for="lastUpdate">Ultima Actualizacion*</label>
+          <input type="text" id="lastUpdate" name="lastUpdate" required />
+        </div>
+
+        <!-- details -->
+        <div class="form-group">
+          <label for="file-size">Detalles*</label>
+          <input type="text" id="details" name="details" required />
+        </div>
+
+        <!-- Botón de Envío -->
+        <div id="error-message" style="color: red; display: none"></div>
+        <button type="submit" class="btn-submit">Subir Juego</button>
+      </form>
+    </div>
+    <script src="/js/upload-validation.js"></script>
+  </body>
 </html>

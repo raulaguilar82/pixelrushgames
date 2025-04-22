@@ -1,7 +1,7 @@
 <a href="/games/<%= game.slug %>">
   <div class="game-card"> 
 
-    <img src="<%= game.imageUrl %>" alt="<%= game.title %>">
+    <img src="<%= game.imageUrl %>" loading="lazy" decoding="async" alt="<%= game.title %>">
 
     <p class="game-card-genre">
       <%= game.genre %>

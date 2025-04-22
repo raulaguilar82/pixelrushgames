@@ -3,7 +3,7 @@ const multerS3 = require('multer-s3');
 const path = require('path');
 const { s3 } = require('../config/s3Client.js');
 
-const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
 
 const upload = multer({
   storage: multerS3({
@@ -14,9 +14,10 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: (req, file, cb) => {
-      const folder = req.body.folder || 'uploads';
+      const folder = 'uploads';
       const filename = `${Date.now()}-${file.originalname}`;
-      cb(null, `${folder}/${filename}`);
+      req.cleanPath = `${folder}/${filename}`;
+      cb(null, req.cleanPath);
     },
   }),
   limits: { fileSize: 5 * 1024 * 1024 },

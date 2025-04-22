@@ -110,8 +110,10 @@ exports.uploadGame = async (req, res) => {
     } = req.body;
 
     // Obtener URLs directas desde Cloudflare R2
-    const imageUrl = req.files.image[0].location;
-    const captures = req.files.captures.map((file) => file.location);
+    const imageUrl = `https://assets.pixelrushgames.xyz/${req.files.image[0].key}`;
+    const captures = req.files.captures.map(
+      (file) => `https://assets.pixelrushgames.xyz/${file.key}`
+    );
 
     const newGame = new Game({
       title,
