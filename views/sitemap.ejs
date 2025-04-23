@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Páginas principales -->
+  <url>
+    <loc><%= url %></loc>
+    <lastmod><%= new Date().toISOString() %></lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Juegos individuales -->
+  <% games.forEach(game => { %>
+  <url>
+    <loc><%= url %>/games/<%= game.slug %></loc>
+    <lastmod><%= game.updatedAt.toISOString() %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <% if(game.imageUrl) { %>
+    <image:image>
+      <image:loc><%= game.imageUrl %></image:loc>
+      <image:title><%= game.title %></image:title>
+    </image:image>
+    <% } %>
+  </url>
+  <% }); %>
+
+  <!-- Páginas estáticas -->
+  <url>
+    <loc><%= url %>/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc><%= url %>/dmca</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

@@ -32,7 +32,12 @@ app.use(
         blockAllMixedContent: [], // Bloquea contenido mixto
       },
     },
-    hsts: { maxAge: 63072000, includeSubDomains: true },
+    hsts: {
+      maxAge: 63072000,
+      includeSubDomains: true,
+      preload: true,
+    },
+    frameguard: { action: 'deny' },
   })
 );
 
@@ -62,21 +67,71 @@ mongoose
   .then(() => console.log('Conectado a la base de datos'))
   .catch((err) => console.error('Error de conexión a la base de datos:', err));
 
-// Estado predeterminado para la paginación
-app.use((req, res, next) => {
-  res.locals.searchQuery = '';
-  res.locals.currentPlatform = req.query.platform || null;
-  res.locals.currentPage = 1;
-  res.locals.totalPages = 1;
-  next();
-});
-
 // Middlewares
-app.use(express.static('public')); // Carpeta para archivos estáticos
+app.use(express.static('public'));
 app.use(express.json()); // Analiza cuerpos JSON
 app.use(express.urlencoded({ extended: true })); // Analiza cuerpos URL-encoded
+// Valores por defecto para todas las páginas
+app.use((req, res, next) => {
+  res.locals = {
+    pageTitle:
+      'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive | PixelRushGames',
+    metaDescription:
+      'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
+    metaKeywords: [
+      'juegos gratis',
+      'descargar juegos',
+      'PC games',
+      'Android games',
+      'PixelRushGames',
+    ],
+    ogImage: '/assets/favicon/favicon.ico',
+    originalUrl: req.originalUrl,
+    currentPlatform: req.query.platform || null,
+    searchQuery: '',
+    currentPage: 1,
+    totalPages: 1,
+  };
+  next();
+});
+// Middleware para detectar Cloudflare
+app.use((req, res, next) => {
+  if (req.headers['cf-visitor']) {
+    res.locals.isCloudflare = true;
+    req.realIp = req.headers['cf-connecting-ip'];
+  }
+  next();
+});
+// Configuración específica para CF
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+}
+// Middleware para cache del sitemap
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 // Rutas
+const Game = require('./models/Game');
+app.get('/sitemap.xml', cache('6 hours'), async (req, res) => {
+  try {
+    const [games, staticPages] = await Promise.all([
+      Game.find().select('slug updatedAt imageUrl title').lean(),
+    ]);
+
+    const url = process.env.SITE_URL || 'https://pixelrushgames.xyz';
+
+    res.header('Content-Type', 'application/xml');
+    res.render('sitemap', {
+      games,
+      url,
+      lastMod: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('🚨 Error generando sitemap:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+
 app.use('/', require('./routes/home.routes'));
 app.use('/admin', require('./routes/admin.routes'));
 app.use('/games', require('./routes/games.routes'));

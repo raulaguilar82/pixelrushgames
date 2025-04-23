@@ -1,70 +1,134 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Juego</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="/css/edit.css">
-</head>
-<body>
-  <div class="edit-container">
-    <h1 class="edit-title">Editar Juego</h1>
-    <form action="/admin/edit/<%= game._id %>" method="POST" class="edit-form">
-      <div class="form-group">
-        <label for="title">Título</label>
-        <input type="text" id="title" name="title" value="<%= game.title %>" required>
-      </div>
-      <div class="form-group">
-        <label for="description">Descripción</label>
-        <textarea id="description" name="description" required><%= game.description %></textarea>
-      </div>
-      <div class="form-group">
-        <label for="platform">Plataforma</label>
-        <input type="text" id="platform" name="platform" value="<%= game.platform %>" required>
-      </div>
-      <div class="form-group">
-        <label for="genre">Género</label>
-        <input type="text" id="genre" name="genre" value="<%= game.genre %>" required>
-      </div>
-      <div class="form-group">
-        <label for="langText">Idiomas de Texto</label>
-        <input type="text" id="langText" name="langText" value="<%= game.langText %>" required>
-      </div>
-      <div class="form-group">
-        <label for="langVoices">Idiomas de Voces</label>
-        <input type="text" id="langVoices" name="langVoices" value="<%= game.langVoices %>" required>
-      </div>
-      <div class="form-group">
-        <label for="fileSize">Tamaño del Archivo</label>
-        <input type="text" id="fileSize" name="fileSize" value="<%= game.fileSize %>" required>
-      </div>
-      <div class="form-group">
-        <label for="downloadLink">Enlace de Descarga</label>
-        <input type="url" id="downloadLink" name="downloadLink" value="<%= game.downloadLink %>" required>
-      </div>
-      <div class="form-group">
-        <label for="minRequirements">Requisitos Minimos</label>
-        <textarea id="minRequirements" name="minRequirements" required><%= game.minRequirements %></textarea>
-      </div>
-      <div class="form-group">
-        <label for="recRequirements">Requisitos Recomendados</label>
-        <textarea id="recRequirements" name="recRequirements" required><%= game.recRequirements %></textarea>
-      </div>
-      <div class="form-group">
-        <label for="releaseDate">Fecha de Lanzamiento</label>
-        <input type="text" id="releaseDate" name="releaseDate" value="<%= game.releaseDate %>" required>
-      </div>
-      <div class="form-group">
-        <label for="lastUpdate">Última Actualización</label>
-        <input type="text" id="lastUpdate" name="lastUpdate" value="<%= game.lastUpdate %>" required>
-      </div>
-      <div class="form-group">
-        <label for="details">Detalles</label>
-        <textarea id="details" name="details" required><%= game.details %></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Guardar Cambios</button>
-    </form>
-  </div>
-</body>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet" href="/css/edit.css" />
+  </head>
+
+  <body>
+    <div class="edit-container">
+      <h1 class="edit-title">Editar Juego</h1>
+      <form
+        action="/admin/edit/<%= game._id %>"
+        method="POST"
+        class="edit-form"
+      >
+        <div class="form-group">
+          <label for="title">Título</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value="<%= game.title %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="description">Descripción</label>
+          <textarea id="description" name="description" required>
+<%= game.description %></textarea
+          >
+        </div>
+        <div class="form-group">
+          <label for="platform">Plataforma</label>
+          <input
+            type="text"
+            id="platform"
+            name="platform"
+            value="<%= game.platform %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="genre">Género</label>
+          <input
+            type="text"
+            id="genre"
+            name="genre"
+            value="<%= game.genre %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="langText">Idiomas de Texto</label>
+          <input
+            type="text"
+            id="langText"
+            name="langText"
+            value="<%= game.langText %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="langVoices">Idiomas de Voces</label>
+          <input
+            type="text"
+            id="langVoices"
+            name="langVoices"
+            value="<%= game.langVoices %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="fileSize">Tamaño del Archivo</label>
+          <input
+            type="text"
+            id="fileSize"
+            name="fileSize"
+            value="<%= game.fileSize %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="downloadLink">Enlace de Descarga</label>
+          <input
+            type="url"
+            id="downloadLink"
+            name="downloadLink"
+            value="<%= game.downloadLink %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="minRequirements">Requisitos Minimos</label>
+          <textarea id="minRequirements" name="minRequirements" required>
+<%= game.minRequirements %></textarea
+          >
+        </div>
+        <div class="form-group">
+          <label for="recRequirements">Requisitos Recomendados</label>
+          <textarea id="recRequirements" name="recRequirements" required>
+<%= game.recRequirements %></textarea
+          >
+        </div>
+        <div class="form-group">
+          <label for="releaseDate">Fecha de Lanzamiento</label>
+          <input
+            type="text"
+            id="releaseDate"
+            name="releaseDate"
+            value="<%= game.releaseDate %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="lastUpdate">Última Actualización</label>
+          <input
+            type="text"
+            id="lastUpdate"
+            name="lastUpdate"
+            value="<%= game.lastUpdate %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="details">Detalles</label>
+          <textarea id="details" name="details" required>
+<%= game.details %></textarea
+          >
+        </div>
+        <button type="submit" class="btn-submit">Guardar Cambios</button>
+      </form>
+    </div>
+  </body>
 </html>

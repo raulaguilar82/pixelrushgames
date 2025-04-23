@@ -1,0 +1,43 @@
+# -----------------------------------------------
+# robots.txt para PixelRushGames.xyz
+# Última actualización: 2025-04-23
+# -----------------------------------------------
+
+User-agent: *
+# -----------------------------------------------
+# Directivas generales
+# -----------------------------------------------
+Allow: /$
+Allow: /games/
+Allow: /contact
+
+Disallow: /admin/
+Disallow: /uploads/
+Disallow: /api/
+Disallow: /brokenURL
+Disallow: /dmca
+
+# -----------------------------------------------
+# Bloqueo de parámetros URL y archivos sensibles
+# -----------------------------------------------
+Disallow: /*?*
+Disallow: /search?q=
+Disallow: /*.env$
+Disallow: /*.git$
+
+# -----------------------------------------------
+# Configuración para bots específicos
+# -----------------------------------------------
+User-agent: SEMrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# -----------------------------------------------
+# Sitemaps
+# -----------------------------------------------
+Sitemap: https://pixelrushgames.xyz/sitemap.xml

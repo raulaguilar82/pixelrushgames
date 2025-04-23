@@ -2,11 +2,21 @@
 <html lang="es">
 
 <head>
-  <meta name="description" content="PixelRushGames - Juegos Full Español APK y PC.">
-  <title>PixelRushGames - Juegos PC y Android Full Español</title>
-
   <%- include('partials/head') %>
 
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PixelRushGames",
+      "url": "https://pixelrushgames.xyz",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://pixelrushgames.xyz/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
 </head>
 
 <body>

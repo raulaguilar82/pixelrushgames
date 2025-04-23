@@ -34,6 +34,22 @@ exports.getHome = async (req, res) => {
       totalPages,
       searchQuery: search,
       currentPlatform: platform,
+      pageTitle:
+        'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive',
+      metaDescription:
+        'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
+      metaKeywords: [
+        'descargar juegos gratis',
+        'juegos para PC',
+        'juegos para Android',
+        'juegos full español',
+        'juegos gratis',
+        'últimos lanzamientos',
+        'descargar juegos',
+        'PC games',
+        'Android games',
+        'PixelRushGames',
+      ],
     });
   } catch (error) {
     console.error('Error al obtener juegos:', error.message);
@@ -60,6 +76,22 @@ exports.gamesController = {
         totalPages,
         searchQuery: search,
         currentPlatform: platform,
+        pageTitle:
+          'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive',
+        metaDescription:
+          'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
+        metaKeywords: [
+          'descargar juegos gratis',
+          'juegos para PC',
+          'juegos para Android',
+          'juegos full español',
+          'juegos gratis',
+          'últimos lanzamientos',
+          'descargar juegos',
+          'PC games',
+          'Android games',
+          'PixelRushGames',
+        ],
       });
     } catch (err) {
       console.error('Error al obtener juegos:', err);
@@ -88,6 +120,21 @@ exports.searchGames = async (req, res) => {
       currentPage: page,
       totalPages,
       currentPlatform: platform,
+      pageTitle: `Resultados de busqueda para: ${search} - Juegos Full Español Gratis para PC y Android.`,
+      metaDescription:
+        'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
+      metaKeywords: [
+        'descargar juegos gratis',
+        'juegos para PC',
+        'juegos para Android',
+        'juegos full español',
+        'juegos gratis',
+        'últimos lanzamientos',
+        'descargar juegos',
+        'PC games',
+        'Android games',
+        'PixelRushGames',
+      ],
     });
   } catch (error) {
     console.error('Error en búsqueda:', error);
@@ -98,13 +145,49 @@ exports.searchGames = async (req, res) => {
 };
 
 exports.getDMCA = (req, res) => {
-  res.render('dmca');
+  res.render('dmca', {
+    pageTitle: 'Política DMCA - Derechos de Autor y Reporte de Infracciones',
+    metaDescription:
+      'Cumplimiento de la Digital Millennium Copyright Act (DMCA). Reporte de contenido protegido y proceso de eliminación. Respetamos los derechos de propiedad intelectual.',
+    metaKeywords: [
+      'DMCA',
+      'derechos autor',
+      'reportar infracción',
+      'copyright',
+      'propiedad intelectual',
+      'proceso legal',
+    ],
+  });
 };
 
 exports.getContact = (req, res) => {
-  res.render('contact');
+  res.render('contact', {
+    pageTitle: 'Contacto - Soporte Técnico y Comunicación',
+    metaDescription:
+      'Formas de contactar al equipo de PixelRushGames. Soporte técnico, colaboraciones y consultas generales. Respuesta en menos de 24 horas.',
+    metaKeywords: [
+      'contacto',
+      'soporte técnico',
+      'ayuda',
+      'colaboraciones',
+      'consultas',
+      'atención al usuario',
+    ],
+  });
 };
 
 exports.getBrokenURL = (req, res) => {
-  res.render('brokenURL');
+  res.render('brokenURL', {
+    pageTitle: 'Reportar Enlace Roto - Contribuye a Mejorar el Sitio',
+    metaDescription:
+      '¿Encontraste un enlace roto o que no funciona? Repórtalo aquí y ayudanos a mantener actualizado nuestro catálogo de juegos.',
+    metaKeywords: [
+      'reportar enlace',
+      'enlace roto',
+      'error descarga',
+      'solución problemas',
+      'mejorar sitio',
+      'feedback usuarios',
+    ],
+  });
 };

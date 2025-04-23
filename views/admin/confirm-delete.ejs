@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirmar Eliminación</title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('../partials/head') %>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -62,6 +59,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="delete-confirm">
     <h2>¿Eliminar "<%= game.title %>"?</h2>
@@ -73,4 +71,5 @@
     </form>
   </div>
 </body>
+
 </html>

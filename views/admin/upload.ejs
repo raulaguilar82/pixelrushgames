@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <title>Subir Juego | Panel de Admin</title>
-
+    <%- include('../partials/head') %>
     <style>
       body {
         font-family: 'Arial', sans-serif;
@@ -76,8 +75,6 @@
         font-size: 14px;
       }
     </style>
-
-    <%- include('../partials/head') %>
   </head>
 
   <body>
@@ -218,7 +215,7 @@
         <!-- details -->
         <div class="form-group">
           <label for="file-size">Detalles*</label>
-          <input type="text" id="details" name="details" required />
+          <textarea id="details" name="details" required></textarea>
         </div>
 
         <!-- Botón de Envío -->

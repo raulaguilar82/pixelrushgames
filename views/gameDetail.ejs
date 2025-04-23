@@ -2,11 +2,20 @@
 <html lang="es">
 
 <head>
-  <title>
-    <%= title %> | PixelRushGames
-  </title>
-  <%- include('partials/head') %>
+
+  <%- include('partials/head', {
+    pageTitle: pageTitle,
+    metaDescription: metaDescription,
+    metaKeywords: metaKeywords,
+    ogImage: ogImage,
+    canonicalUrl: canonicalUrl,
+    structuredData: structuredData
+  }) %>
   <link rel="stylesheet" href="/css/gameDetail.css">
+
+  <script type="application/ld+json">
+    <%- JSON.stringify(structuredData, null, 2) %>
+  </script>
 
   <script>
     const minFromDB = `<%= game.minRequirements %>`;
@@ -118,7 +127,7 @@
                   <h3 class="h3 card-title dt-subtitle">Detalles</h3>
                   <div class="br-tdt"></div>
                   <p class="card-text dt-game-description dt-brln">
-                    <%= game.details %>
+                    <strong><%= game.details %></strong>
                   </p>
                     
                 </div>
@@ -133,7 +142,7 @@
             <div class="card-body">
 
               <h1 class="dt-game-title">
-                <%= game.title %>
+                <strong><%= game.title %></strong>
               </h1>
 
               <div class="br-td"></div>

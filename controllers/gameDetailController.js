@@ -13,11 +13,44 @@ exports.getGameBySlug = async (req, res) => {
       .limit(6) // 6 juegos recomendados
       .sort({ createdAt: -1 });
 
+    const seoData = {
+      pageTitle: `Descargar ${game.title} MEGA, Mediafire, Google Drive`,
+      metaDescription: `Descarga ${game.title} GRATIS a traves de MEGA, Mediafire, Google drive. ${game.details}... Plataforma: ${game.platform}. Géneros: ${game.genre}.`,
+      metaKeywords: [
+        game.title.toLowerCase(),
+        `descargar ${game.title}`,
+        game.platform,
+        game.genre,
+        game.langText,
+        game.langVoices,
+        'juego gratis',
+        'full versión',
+        'mega',
+        'mediafire',
+        'google drive',
+      ],
+      ogImage: game.imageUrl,
+      canonicalUrl: `/games/${game.slug}`,
+      structuredData: {
+        '@context': 'https://schema.org',
+        '@type': 'VideoGame',
+        name: game.title,
+        description: game.description,
+        image: game.imageUrl,
+        operatingSystem: game.platform,
+        applicationCategory: 'Game',
+        storageRequirements: game.fileSize,
+        datePublished: game.releaseDate,
+        genre: game.genre,
+      },
+    };
+
     res.render('gameDetail', {
       game,
       recommendedGames,
       title: game.title,
       currentPlatform: null,
+      ...seoData,
     });
   } catch {
     res.status(500).render('error', { message: 'Error al cargar el juego' });

@@ -14,7 +14,8 @@ const { s3 } = require('../config/s3Client.js');
 exports.showLogin = (req, res) => {
   res.render('admin/login', {
     error: null,
-    success: req.query.success, // Para mensajes de éxito
+    success: req.query.success,
+    pageTitle: 'LOG IN',
   });
 };
 
@@ -71,7 +72,10 @@ exports.logout = (req, res) => {
 exports.getPanel = async (req, res) => {
   try {
     const games = await Game.find().sort({ createdAt: -1 });
-    res.render('admin/panel', { games });
+    res.render('admin/panel', {
+      games,
+      pageTitle: 'Admin Panel',
+    });
   } catch (error) {
     console.error('Error al cargar el panel de administración:', error.message);
     res.status(500).send('Error interno del servidor');
@@ -79,7 +83,9 @@ exports.getPanel = async (req, res) => {
 };
 
 exports.getUploadForm = (req, res) => {
-  res.render('admin/upload');
+  res.render('admin/upload', {
+    pageTitle: 'Subir Juego',
+  });
 };
 
 exports.uploadGame = async (req, res) => {
@@ -164,7 +170,8 @@ exports.getEditForm = async (req, res) => {
     res.render('admin/edit', {
       game,
       error: null,
-      success: req.query.success, // Para mensajes de éxito
+      success: req.query.success,
+      pageTitle: `Editar ${game.title}`,
     });
   } catch (error) {
     console.error('Error al cargar el formulario de edición:', error.message);
@@ -208,6 +215,7 @@ exports.editGame = async (req, res) => {
     game.releaseDate = releaseDate;
     game.lastUpdate = lastUpdate;
     game.details = details;
+    game.updatedAt = new Date();
 
     await game.save();
     res.redirect('/?success=Juego editado correctamente');
@@ -227,7 +235,8 @@ exports.getConfirmDelete = async (req, res) => {
     res.render('admin/confirm-delete', {
       game,
       error: null,
-      success: req.query.success, // Para mensajes de éxito
+      success: req.query.success,
+      pageTitle: 'Confirmar Eliminacion',
     });
   } catch (error) {
     console.error(
