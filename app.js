@@ -16,28 +16,73 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+// Importar CSRF
+const csrf = require('csurf');
 const helmet = require('helmet');
+
+// Middleware para generar un nonce único por respuesta
+const crypto = require('crypto');
+app.use((req, res, next) => {
+  res.locals.nonce = crypto.randomBytes(16).toString('base64');
+  next();
+});
+
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
+        scriptSrc: [
+          "'self'",
+          'https://cdn.jsdelivr.net',
+          'https://us.i.posthog.com',
+          (req, res) => `'nonce-${res.locals.nonce}'`,
+        ],
         styleSrc: ["'self'", 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'https://assets.pixelrushgames.xyz'],
-        connectSrc: ["'self'", 'https://discord.com'],
+        imgSrc: [
+          "'self'",
+          'data:',
+          'https://assets.pixelrushgames.xyz',
+          'https://us.i.posthog.com',
+        ],
+        connectSrc: [
+          "'self'",
+          'https://discord.com',
+          'https://us.i.posthog.com',
+        ],
+        fontSrc: ["'self'", 'https://cdn.jsdelivr.net', 'data:'],
+        mediaSrc: ["'self'"],
+        workerSrc: ["'self'"],
+        manifestSrc: ["'self'"],
         frameSrc: ["'none'"],
+        frameAncestors: ["'none'"],
         objectSrc: ["'none'"],
-        upgradeInsecureRequests: [], // Fuerza solicitudes HTTPS
-        blockAllMixedContent: [], // Bloquea contenido mixto
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        upgradeInsecureRequests: [],
+        blockAllMixedContent: [],
       },
+      reportOnly: false,
     },
     hsts: {
-      maxAge: 63072000,
+      maxAge: 31536000,
       includeSubDomains: true,
       preload: true,
     },
     frameguard: { action: 'deny' },
+    noSniff: true,
+    xssFilter: true,
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+    permissionsPolicy: {
+      camera: [],
+      microphone: [],
+      geolocation: [],
+      payment: [],
+      usb: [],
+      magnetometer: [],
+      gyroscope: [],
+      accelerometer: [],
+    },
   })
 );
 
@@ -58,8 +103,8 @@ requiredEnvVars.forEach((env) => {
 });
 
 // Configuración de vistas
-app.set('view engine', 'ejs'); // Motor de plantillas
-app.set('views', path.join(__dirname, 'views')); // Carpeta de vistas
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Conexión a MongoDB
 mongoose
@@ -67,33 +112,47 @@ mongoose
   .then(() => console.log('Conectado a la base de datos'))
   .catch((err) => console.error('Error de conexión a la base de datos:', err));
 
-// Middlewares
+// Middlewares básicos
 app.use(express.static('public'));
-app.use(express.json()); // Analiza cuerpos JSON
-app.use(express.urlencoded({ extended: true })); // Analiza cuerpos URL-encoded
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// CSRF solo para rutas específicas que NO usan multipart
+const csrfProtection = csrf({
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 3600000,
+  },
+  ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
+});
+
+// Aplicar CSRF solo a rutas que NO manejan archivos
+app.use('/api', csrfProtection);
+
 // Valores por defecto para todas las páginas
 app.use((req, res, next) => {
-  res.locals = {
-    pageTitle:
-      'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive | PixelRushGames',
-    metaDescription:
-      'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
-    metaKeywords: [
-      'juegos gratis',
-      'descargar juegos',
-      'PC games',
-      'Android games',
-      'PixelRushGames',
-    ],
-    ogImage: '/assets/favicon/favicon.ico',
-    originalUrl: req.originalUrl,
-    currentPlatform: req.query.platform || null,
-    searchQuery: '',
-    currentPage: 1,
-    totalPages: 1,
-  };
+  res.locals.pageTitle =
+    'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive | PixelRushGames';
+  res.locals.metaDescription =
+    'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.';
+  res.locals.metaKeywords = [
+    'juegos gratis',
+    'descargar juegos',
+    'PC games',
+    'Android games',
+    'PixelRushGames',
+  ];
+  res.locals.ogImage = '/assets/favicon/favicon.ico';
+  res.locals.originalUrl = req.originalUrl;
+  res.locals.currentPlatform = req.query.platform || null;
+  res.locals.searchQuery = '';
+  res.locals.currentPage = 1;
+  res.locals.totalPages = 1;
   next();
 });
+
 // Middleware para detectar Cloudflare
 app.use((req, res, next) => {
   if (req.headers['cf-visitor']) {
@@ -102,10 +161,12 @@ app.use((req, res, next) => {
   }
   next();
 });
+
 // Configuración específica para CF
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 }
+
 // Middleware para cache del sitemap
 const apicache = require('apicache');
 const cache = apicache.middleware;

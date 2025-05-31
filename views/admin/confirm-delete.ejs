@@ -1,75 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <%- include('../partials/head') %>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .delete-confirm {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-    }
-    .delete-confirm h2 {
-      color: #dc3545;
-      margin-bottom: 10px;
-    }
-    .delete-confirm p {
-      color: #6c757d;
-      margin-bottom: 20px;
-    }
-    .btn-danger {
-      background-color: #dc3545;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-    .btn-danger:hover {
-      background-color: #c82333;
-    }
-    .btn-cancel {
-      background-color: #6c757d;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .btn-cancel:hover {
-      background-color: #5a6268;
-    }
-  </style>
-</head>
+  <head>
+    <%- include('../partials/head') %>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .delete-confirm {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+      .delete-confirm h2 {
+        color: #dc3545;
+        margin-bottom: 10px;
+      }
+      .delete-confirm p {
+        color: #6c757d;
+        margin-bottom: 20px;
+      }
+      .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+      .btn-danger:hover {
+        background-color: #c82333;
+      }
+      .btn-cancel {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+      }
+      .btn-cancel:hover {
+        background-color: #5a6268;
+      }
+    </style>
+  </head>
 
-<body>
-  <div class="delete-confirm">
-    <h2>¿Eliminar "<%= game.title %>"?</h2>
-    <p>Esta acción no se puede deshacer</p>
-    
-    <form action="/admin/games/delete/<%= game._id %>" method="POST">
-      <button type="submit" class="btn-danger">Confirmar</button>
-      <a href="/" class="btn-cancel">Cancelar</a>
-    </form>
-  </div>
-</body>
+  <body>
+    <div class="delete-confirm">
+      <h2>¿Eliminar "<%= game.title %>"?</h2>
+      <p>Esta acción no se puede deshacer</p>
 
+      <form action="/admin/games/delete/<%= game._id %>" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+        <button type="submit" class="btn-danger">Confirmar</button>
+        <a href="/" class="btn-cancel">Cancelar</a>
+      </form>
+    </div>
+  </body>
 </html>

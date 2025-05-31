@@ -189,5 +189,6 @@ exports.getBrokenURL = (req, res) => {
       'mejorar sitio',
       'feedback usuarios',
     ],
+    csrfToken: req.csrfToken(),
   });
 };

@@ -1,46 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Link caido | PixelRushGames</title>
     <%- include('partials/head') %>
-</head>
+  </head>
 
-<body>
-    <header>
-        <%- include('partials/navbar') %>
-    </header>
+  <body>
+    <header><%- include('partials/navbar') %></header>
 
     <main class="form-container">
-        <div class="form-content">
-            <h1>🔗 Reportar Enlace Caído</h1>
-            <form id="reportForm">
-                <div class="form-group">
-                    <label for="gameName" class="fw-bold">Nombre del juego *</label>
-                    <input type="text" id="gameName" required placeholder="Ej: Call of Duty...">
-                </div>
+      <div class="form-content">
+        <h1>🔗 Reportar Enlace Caído</h1>
+        <form id="reportForm">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
-                <div class="form-group">
-                    <label for="brokenLink" class="fw-bold">Cual enlace no funciona? *</label>
-                    <input type="text" id="brokenLink" required placeholder="Mega, Mediafire, Google Drive...">
-                </div>
+          <div class="form-group">
+            <label for="gameName" class="fw-bold">Nombre del juego *</label>
+            <input
+              type="text"
+              id="gameName"
+              required
+              placeholder="Ej: Call of Duty..."
+            />
+          </div>
 
-                <div class="form-group">
-                    <label for="userNote" class="fw-bold">Notas adicionales</label>
-                    <textarea id="userNote" rows="6" placeholder="Ej: El enlace redirige a publicidad..."
-                        class="w-100"></textarea>
-                </div>
+          <div class="form-group">
+            <label for="brokenLink" class="fw-bold"
+              >Cual enlace no funciona? *</label
+            >
+            <input
+              type="text"
+              id="brokenLink"
+              required
+              placeholder="Mega, Mediafire, Google Drive..."
+            />
+          </div>
 
-                <button type="submit" class="btn btn-success">Enviar Reporte</button>
-            </form>
+          <div class="form-group">
+            <label for="userNote" class="fw-bold">Notas adicionales</label>
+            <textarea
+              id="userNote"
+              rows="6"
+              placeholder="Ej: El enlace redirige a publicidad..."
+              class="w-100"
+            ></textarea>
+          </div>
 
-            <div id="responseMessage" style="margin-top: 20px;"></div>
-        </div>
+          <button type="submit" class="btn btn-success">Enviar Reporte</button>
+        </form>
+
+        <div id="responseMessage" style="margin-top: 20px"></div>
+      </div>
     </main>
 
     <%- include('partials/footer') %>
 
     <script src="/js/reports.js"></script>
-</body>
-
+  </body>
 </html>

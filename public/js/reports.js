@@ -1,3 +1,5 @@
+const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
 document.getElementById('reportForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -28,7 +30,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
   try {
     const res = await fetch('/api/report', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'CSRF-Token': csrfToken },
       body: JSON.stringify(reportData),
     });
 
