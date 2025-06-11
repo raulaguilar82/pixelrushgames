@@ -14,6 +14,6 @@ exports.deleteLimiter = rateLimit({
 
 exports.uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 2,
+  max: 5,
   message: 'Espera 1 hora entre subidas',
 });

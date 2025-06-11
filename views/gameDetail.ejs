@@ -17,7 +17,7 @@
     <%- JSON.stringify(structuredData, null, 2) %>
   </script>
 
-  <script>
+  <script nonce="<%= nonce %>">
     const minFromDB = `<%= game.minRequirements %>`;
     const minRequirementsText = minFromDB.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     
@@ -110,6 +110,8 @@
 
               <div class="br-td"></div>
 
+              <p class="pass">Contraseña: pixelrushgames.xyz</p>
+
               <a href="<%= game.downloadLink %>" class="btn btn-danger w-100 py-2 btnheight" target="_blank">
                 <i class="bi bi-download me-2"></i><img src="/assets/mega.png" alt="Descargar Mega" class="dwIMG">
               </a>
@@ -119,7 +121,12 @@
               <a href="<%= game.downloadLink %>" class="btn btn-success w-100 py-2 mt-2 btnheight" target="_blank">
                 <i class="bi bi-download me-2"></i><img src="/assets/gdrive.png" alt="Descargar Mega" class="dwIMG">
               </a>
-              <a href="">¿Como descargar?</a>
+
+              <div class="text-center mt-3 d-flex justify-content-between">
+                <a href="">¿Como descargar?</a>
+                <a href="/brokenURL">Reportar link caido</a>
+              </div>
+              
 
               <div class="card shadow-sm mt-4">
                 <div class="card-body">
@@ -162,7 +169,7 @@
               <h4 class="dt-subsubtitle mb-3">Requisitos Minimos</h4>
               <div class="dt-requirements-br"></div>
               <p class="card-text dt-game-description dt-brln">
-                <script>
+                <script nonce="<%= nonce %>">
                   document.write(minRequirementsText);
                 </script>
               </p>
@@ -171,7 +178,7 @@
               <h4 class="dt-subsubtitle mb-3">Requisitos Recomendados</h4>
               <div class="dt-requirements-br"></div>
               <p class="dt-game-requirements">
-                <script>
+                <script nonce="<%= nonce %>">
                   document.write(recRequirementsText);
                 </script>
               </p>

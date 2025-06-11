@@ -37,13 +37,6 @@ header {
 }
 
 header nav {
-  display: flex;
-  background-color: rgba(39, 5, 5, 0.5);
-  backdrop-filter: blur(1px);
-  padding: 0.3rem 0;
-  padding-bottom: 0.4rem;
-  gap: 4rem;
-  width: 100%;
 }
 
 header nav a {

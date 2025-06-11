@@ -81,3 +81,9 @@ strong {
   width: 100%;
   object-fit: cover;
 }
+
+.pass {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgb(230, 0, 0);
+}
