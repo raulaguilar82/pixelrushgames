@@ -18,6 +18,9 @@
   </script>
 
   <script nonce="<%= nonce %>">
+    const gameFromDB = `<%= game.description %>`;
+    const gameDescription = gameFromDB.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
     const minFromDB = `<%= game.minRequirements %>`;
     const minRequirementsText = minFromDB.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     
@@ -155,8 +158,10 @@
               <div class="br-td"></div>
 
               <h3 class="dt-subtitle"><img src="/assets/description.png" alt="Descripción" class="dcIMG"></h3>
-              <p class="card-text dt-game-description">
-                <%= game.description %>
+              <p class="card-text dt-game-description dt-brln">
+                <script nonce="<%= nonce %>">
+                  document.write(gameDescription);
+                </script>
               </p>
             </div>
           </div>

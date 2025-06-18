@@ -35,9 +35,9 @@ exports.getHome = async (req, res) => {
       searchQuery: search,
       currentPlatform: platform,
       pageTitle:
-        'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive',
+        'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Torrent',
       metaDescription:
-        'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
+        'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Torrent y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.',
       metaKeywords: [
         'descargar juegos gratis',
         'juegos para PC',
@@ -47,7 +47,7 @@ exports.getHome = async (req, res) => {
         'últimos lanzamientos',
         'descargar juegos',
         'PC games',
-        'Android games',
+        'torrent',
         'PixelRushGames',
       ],
     });

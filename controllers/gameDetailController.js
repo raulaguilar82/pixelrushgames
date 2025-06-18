@@ -14,8 +14,8 @@ exports.getGameBySlug = async (req, res) => {
       .sort({ createdAt: -1 });
 
     const seoData = {
-      pageTitle: `Descargar ${game.title} MEGA, Mediafire, Google Drive`,
-      metaDescription: `Descarga ${game.title} GRATIS a traves de MEGA, Mediafire, Google drive. ${game.details}... Plataforma: ${game.platform}. Géneros: ${game.genre}.`,
+      pageTitle: `Descargar ${game.title} MEGA, Mediafire, Torrent`,
+      metaDescription: `Descarga ${game.title} GRATIS a traves de MEGA, Mediafire, Torrent. ${game.details}... Plataforma: ${game.platform}. Géneros: ${game.genre}.`,
       metaKeywords: [
         game.title.toLowerCase(),
         `descargar ${game.title}`,
@@ -27,7 +27,7 @@ exports.getGameBySlug = async (req, res) => {
         'full versión',
         'mega',
         'mediafire',
-        'google drive',
+        'torrent',
       ],
       ogImage: game.imageUrl,
       canonicalUrl: `/games/${game.slug}`,

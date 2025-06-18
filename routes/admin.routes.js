@@ -64,7 +64,7 @@ router.post(
 // Mostrar formulario de edición
 router.get('/edit/:id', csrfProtection, adminController.getEditForm);
 // Procesar edición del juego
-router.post('/edit/:id', authLimiter, csrfProtection, adminController.editGame);
+router.post('/edit/:id', csrfProtection, adminController.editGame);
 
 // Mostrar formulario de confirmación de eliminación
 router.get(

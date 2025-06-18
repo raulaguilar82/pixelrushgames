@@ -134,9 +134,9 @@ app.use('/api', csrfProtection);
 // Valores por defecto para todas las páginas
 app.use((req, res, next) => {
   res.locals.pageTitle =
-    'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Google Drive | PixelRushGames';
+    'Descarga Juegos Full Español Gratis para PC y Android. MEGA, MediaFire, Torrent | PixelRushGames';
   res.locals.metaDescription =
-    'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Google Drive y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.';
+    'Descarga los mejores juegos gratis para PC y Android. Juegos Full en Español desde servidores como MEGA, Torrent y MediaFire. Descripciones detalladas, requisitos del sistema y capturas.';
   res.locals.metaKeywords = [
     'juegos gratis',
     'descargar juegos',
